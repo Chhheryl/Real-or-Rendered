@@ -1,0 +1,25 @@
+[
+  {
+    "id": 1,
+    "title": "Anatomy & Structure",
+    "tip": "Note the consistent structure in hands, face, and proportions.",
+    "images": {
+      "ai": "anatomy_ai.jpg",
+      "real": "anatomy_real.jpg"
+    },
+    "hotspots": [
+      {
+        "id": 1,
+        "label": "Misaligned eyes",
+        "x": 150,
+        "y": 100
+      },
+      {
+        "id": 2,
+        "label": "Melting hands",
+        "x": 300,
+        "y": 200
+      }
+    ]
+  }
+]
