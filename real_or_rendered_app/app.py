@@ -10,6 +10,8 @@ app.secret_key = 'your_secret_key'
 DATA_PATH = 'data/users.json'
 
 # Ensure user data exists
+
+
 def load_user_data():
     if not os.path.exists(DATA_PATH):
         with open(DATA_PATH, 'w') as f:
@@ -17,9 +19,11 @@ def load_user_data():
     with open(DATA_PATH, 'r') as f:
         return json.load(f)
 
+
 def save_user_data(data):
     with open(DATA_PATH, 'w') as f:
         json.dump(data, f, indent=2)
+
 
 @app.route('/')
 def home():
@@ -27,13 +31,37 @@ def home():
     session['answers'] = {}
     return render_template('home.html')
 
+
+@app.route('/transition')
+def transition():
+    with open('data/lessons.json') as f:
+        lessons = json.load(f)
+    return render_template('transition.html', lessons=lessons)
+
+
 @app.route('/learn/<int:lesson_id>')
 def learn(lesson_id):
     with open('data/lessons.json') as f:
         lessons = json.load(f)
     lesson = next((l for l in lessons if l['id'] == lesson_id), None)
     next_id = lesson_id + 1 if lesson_id < len(lessons) else None
-    return render_template('learn.html', lesson=lesson, next_id=next_id)
+    prev_id = lesson_id - 1 if lesson_id > 1 else None
+
+    # Track completed lessons in session
+    completed = session.get('completed_lessons', [])
+    if lesson_id not in completed:
+        completed.append(lesson_id)
+        session['completed_lessons'] = completed
+
+    return render_template(
+        'learn.html',
+        lesson=lesson,
+        next_id=next_id,
+        prev_id=prev_id,
+        lessons=lessons,
+        unlocked=len(completed)
+    )
+
 
 @app.route('/quiz/<int:question_id>', methods=['GET', 'POST'])
 def quiz(question_id):
@@ -47,6 +75,7 @@ def quiz(question_id):
         return redirect(url_for('quiz', question_id=question_id + 1) if question_id < len(quiz_data) else url_for('result'))
 
     return render_template('quiz.html', question=question)
+
 
 @app.route('/result')
 def result():
@@ -82,5 +111,6 @@ def result():
 
     return render_template('result.html', score=score, feedback=feedback)
 
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)

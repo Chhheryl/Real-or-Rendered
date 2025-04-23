@@ -1,14 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Real or Rendered?</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="text-center p-5">
-  <h1 class="mb-4">Real or Rendered?</h1>
-  <p>Learn how to spot the difference between AI and human-made art.</p>
-  <a href="{{ url_for('learn', lesson_id=1) }}" class="btn btn-primary m-2">🔍 Start Learning</a>
-  <a href="{{ url_for('quiz', question_id=1) }}" class="btn btn-success m-2">🎮 Start Quiz</a>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Real or Rendered?</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="text-center p-5">
+    <h1 class="mb-4">Real or Rendered?</h1>
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-5">
+        <img
+          src="{{ url_for('static', filename='images/home_ai.png') }}"
+          class="img-fluid"
+          alt="AI-generated image"
+        />
+      </div>
+      <div class="col-md-5">
+        <img
+          src="{{ url_for('static', filename='images/home_real.png') }}"
+          class="img-fluid"
+          alt="Human-made image"
+        />
+      </div>
+    </div>
+    <p>AI-generated art is getting more impressive — but it's not perfect.</p>
+    <p>
+      This guide will teach you 6 visual clues to help you spot the difference
+      between machine-made images and real human-created artwork.
+    </p>
+    <a href="{{ url_for('transition') }}" class="btn btn-primary m-2"
+      >🔍 Start Learning</a
+    >
+    <a href="{{ url_for('quiz', question_id=1) }}" class="btn btn-success m-2"
+      >🎮 Start Quiz</a
+    >
+  </body>
 </html>
