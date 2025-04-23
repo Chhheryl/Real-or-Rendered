@@ -25,9 +25,17 @@
         "zoom_ai": "ai_zoom_hand.jpg",
         "zoom_real": "real_zoom_hand.jpg",
         "explanation": "AI struggles with hand anatomy. See the distorted fingers and inconsistent shading."
+      },
+    {
+        "id": 3,
+        "label": "Melting limbs",
+        "x_pct": 70,
+        "y_pct":65,
+        "zoom_ai": "ai_zoom_limbs.jpg",
+        "zoom_real": "real_zoom_limbs.jpg",
+        "explanation": "AI-generated limbs may appear warped, blurred, or inconsistently attached to the body, breaking anatomical logic."
       }
-    ],
-    "quick_tip": "\ud83d\udca1Quick tip: Human artists typically depict anatomy with intention\u2014even when abstract. Note the consistent structure in hands, face, and proportions."
+    ]
   },
   {
     "id": 2,
@@ -37,7 +45,16 @@
       "ai": "lighting_ai.jpg",
       "real": "lighting_real.jpg"
     },
-    "hotspots": []
+    "hotspots": [
+    {
+      "id": 1,
+      "label": "Inconsistent shadow direction",
+      "x_pct": 40,
+      "y_pct": 52,
+      "zoom_ai": "zoom_ai_shadow_angle.jpg",
+      "zoom_real": "zoom_real_shadow_angle.jpg",
+      "explanation": "AI sometimes generates lighting where shadows fall in multiple directions, defying consistent light source logic."
+    }]
   },
   {
     "id": 3,

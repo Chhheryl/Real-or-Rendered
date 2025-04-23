@@ -9,9 +9,14 @@ app.secret_key = 'your_secret_key'
 
 DATA_PATH = 'data/users.json'
 
+
+@app.before_request
+def reset_on_start():
+    if 'initialized' not in session:
+        session.clear()
+        session['initialized'] = True
+
 # Ensure user data exists
-
-
 def load_user_data():
     if not os.path.exists(DATA_PATH):
         with open(DATA_PATH, 'w') as f:
