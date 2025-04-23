@@ -21,5 +21,55 @@
         "y": 200
       }
     ]
+  },
+  {
+    "id": 2,
+    "title": "Lighting & Shadows",
+    "tip": "Do the shadows make sense based on the light source?",
+    "images": {
+      "ai": "lighting_ai.jpg",
+      "real": "lighting_real.jpg"
+    },
+    "hotspots": []
+  },
+  {
+    "id": 3,
+    "title": "Textures & Surfaces",
+    "tip": "Watch for overly smooth or plastic-like textures.",
+    "images": {
+      "ai": "texture_ai.jpg",
+      "real": "texture_real.jpg"
+    },
+    "hotspots": []
+  },
+  {
+    "id": 4,
+    "title": "Symmetry & Composition",
+    "tip": "Perfect symmetry may be a red flag.",
+    "images": {
+      "ai": "symmetry_ai.jpg",
+      "real": "symmetry_real.jpg"
+    },
+    "hotspots": []
+  },
+  {
+    "id": 5,
+    "title": "Coherence in Detail",
+    "tip": "Look for inconsistencies and object blending errors.",
+    "images": {
+      "ai": "detail_ai.jpg",
+      "real": "detail_real.jpg"
+    },
+    "hotspots": []
+  },
+  {
+    "id": 6,
+    "title": "Symbolism & Intent",
+    "tip": "Can you sense emotional or narrative intention?",
+    "images": {
+      "ai": "symbolism_ai.jpg",
+      "real": "symbolism_real.jpg"
+    },
+    "hotspots": []
   }
 ]
