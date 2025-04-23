@@ -17,6 +17,8 @@ def reset_on_start():
         session['initialized'] = True
 
 # Ensure user data exists
+
+
 def load_user_data():
     if not os.path.exists(DATA_PATH):
         with open(DATA_PATH, 'w') as f:
