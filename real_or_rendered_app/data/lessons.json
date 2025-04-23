@@ -11,14 +11,20 @@
       {
         "id": 1,
         "label": "Misaligned eyes",
-        "x": 150,
-        "y": 100
-      },
+        "x_pct": 45,
+        "y_pct": 25,
+        "zoom_ai": "zoom_ai_eyes.jpg",
+        "zoom_real": "zoom_real_eyes.jpg",
+        "explanation": "AI-generated eyes appear asymmetrical or misaligned, especially when the face is turned."
+    },
       {
         "id": 2,
         "label": "Melting hands",
-        "x": 300,
-        "y": 200
+        "x_pct": 30,
+        "y_pct":70,
+        "zoom_ai": "ai_zoom_hand.jpg",
+        "zoom_real": "real_zoom_hand.jpg",
+        "explanation": "AI struggles with hand anatomy. See the distorted fingers and inconsistent shading."
       }
     ]
   },

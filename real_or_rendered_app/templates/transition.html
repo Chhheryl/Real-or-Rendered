@@ -28,7 +28,8 @@
             <div class="card h-100">
               <img
                 src="{{ url_for('static', filename='images/' + lesson.images.ai) }}"
-                class="card-img-top"
+                class="card-img-top img-fluid"
+                style="max-height: 160px; object-fit: cover"
                 alt="{{ lesson.title }}"
               />
               <div class="card-body">
