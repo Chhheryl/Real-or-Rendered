@@ -13,26 +13,37 @@
     />
   </head>
   <body class="p-4">
-
     <!-- Top nav: Real or Rendered? / Home / Gallery / Quiz -->
-    <nav class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
+    <nav
+      class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2"
+    >
       <span class="h4 mb-0">Real or Rendered?</span>
       <ul class="nav">
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('home') }}">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{{ url_for('transition') }}">Gallery</a>
+          <a
+            class="nav-link active"
+            aria-current="page"
+            href="{{ url_for('transition') }}"
+            >Gallery</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('quiz', question_id=1) }}">Quiz</a>
+          <a class="nav-link" href="{{ url_for('quiz', question_id=1) }}"
+            >Quiz</a
+          >
         </li>
       </ul>
     </nav>
 
     <div class="d-flex justify-content-between align-items-center mb-3">
       <div class="text-muted">
-        <strong>🔓 You’ve unlocked: {{ unlocked }} / {{ lessons|length }} cues</strong>
+        <strong
+          >🔓 You’ve unlocked: {{ unlocked }} / {{ lessons|length }}
+          cues</strong
+        >
       </div>
     </div>
 
@@ -88,7 +99,11 @@
         <div class="modal-content p-3">
           <div class="modal-header">
             <h5 class="modal-title">Hotspot Details</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
           </div>
           <div class="modal-body">
             <p id="modal-explanation"></p>
@@ -129,8 +144,7 @@
         >
           ← Previous: {{ lessons[prev_id - 1].title }}
         </a>
-        {% endif %}
-        {% if next_id %}
+        {% endif %} {% if next_id %}
         <a
           href="{{ url_for('learn', lesson_id=next_id) }}"
           class="btn btn-primary"
@@ -138,10 +152,7 @@
           Next: {{ lessons[next_id - 1].title }} →
         </a>
         {% else %}
-        <a
-          href="{{ url_for('quiz', question_id=1) }}"
-          class="btn btn-success"
-        >
+        <a href="{{ url_for('quiz', question_id=1) }}" class="btn btn-success">
           Start the Quiz →
         </a>
         {% endif %}
