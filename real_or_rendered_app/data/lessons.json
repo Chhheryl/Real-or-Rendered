@@ -64,7 +64,17 @@
       "ai": "texture_ai.jpg",
       "real": "texture_real.jpg"
     },
-    "hotspots": []
+    "hotspots": [
+      {
+        "id": 1,
+        "label": "Plastic-like skin",
+        "x_pct": 32,
+        "y_pct": 32,
+        "zoom_ai": "zoom_ai_plastic_highlight.jpg",
+        "zoom_real": "zoom_real_surface_highlight.jpg",
+        "explanation": "AI-generated skin and backgrounds often appear overly smooth or plastic-like, lacking realistic surface texture or detail."
+    }
+    ]
   },
   {
     "id": 4,
