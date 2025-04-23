@@ -13,6 +13,31 @@
     />
   </head>
   <body class="p-4">
+    <!-- Top nav: Real or Rendered? / Home / Gallery / Quiz -->
+    <nav
+      class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2"
+    >
+      <span class="h4 mb-0">Real or Rendered?</span>
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            aria-current="page"
+            href="{{ url_for('transition') }}"
+            >Gallery</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('quiz', question_id=1) }}"
+            >Quiz</a
+          >
+        </li>
+      </ul>
+    </nav>
+
     <div class="d-flex justify-content-between align-items-center mb-3">
       <div class="text-muted">
         <strong
@@ -21,6 +46,8 @@
         >
       </div>
     </div>
+
+    <!-- Section subtitle -->
 
     <h2>{{ lesson.title }}</h2>
     <p class="text-muted">{{ lesson.tip }}</p>
@@ -33,6 +60,7 @@
             src="{{ url_for('static', filename='images/' + lesson.images.ai) }}"
             class="img-fluid"
             id="ai-image"
+            height="300"
           />
           {% for spot in lesson.hotspots %}
           <div
@@ -53,9 +81,17 @@
         <img
           src="{{ url_for('static', filename='images/' + lesson.images.real) }}"
           class="img-fluid"
+          height="300"
         />
       </div>
     </div>
+
+    {% if lesson.quick_tip %}
+    <!-- Quick tip block -->
+    <div class="mb-4">
+      <strong>💡 Quick tip:</strong> {{ lesson.quick_tip }}
+    </div>
+    {% endif %}
 
     <!-- Modal for Zoom -->
     <div class="modal fade" id="zoomModal" tabindex="-1" aria-hidden="true">
@@ -86,35 +122,39 @@
       </div>
     </div>
 
+    <!-- Bottom navigation -->
     <div class="d-flex justify-content-between flex-wrap mt-5 gap-2">
       <div class="d-flex justify-content-center flex-wrap gap-2 mx-auto">
-        <a href="{{ url_for('transition') }}" class="btn btn-outline-secondary"
-          >← Back to Topics</a
-        >
+        <a href="{{ url_for('transition') }}" class="btn btn-outline-secondary">
+          ← Back to Topics
+        </a>
         <a href="{{ url_for('home') }}" class="btn btn-outline-dark">🏠 Home</a>
         <a
           href="{{ url_for('quiz', question_id=1) }}"
           class="btn btn-outline-success"
-          >🎮 Go to Quiz</a
         >
+          🎮 Go to Quiz
+        </a>
       </div>
       <div class="d-flex gap-2">
         {% if prev_id %}
         <a
           href="{{ url_for('learn', lesson_id=prev_id) }}"
           class="btn btn-outline-secondary"
-          >← Previous: {{ lessons[prev_id - 1].title }}</a
         >
+          ← Previous: {{ lessons[prev_id - 1].title }}
+        </a>
         {% endif %} {% if next_id %}
         <a
           href="{{ url_for('learn', lesson_id=next_id) }}"
           class="btn btn-primary"
-          >Next: {{ lessons[next_id - 1].title }} →</a
         >
+          Next: {{ lessons[next_id - 1].title }} →
+        </a>
         {% else %}
-        <a href="{{ url_for('quiz', question_id=1) }}" class="btn btn-success"
-          >Start the Quiz →</a
-        >
+        <a href="{{ url_for('quiz', question_id=1) }}" class="btn btn-success">
+          Start the Quiz →
+        </a>
         {% endif %}
       </div>
     </div>

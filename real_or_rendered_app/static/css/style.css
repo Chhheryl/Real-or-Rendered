@@ -33,3 +33,9 @@
   display: none;
   z-index: 10;
 }
+
+
+.img-fluid {
+  height: 300px !important; 
+  width: auto !important;
+}
