@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Quiz Score</title>
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* --- GLOBAL BODY/BACKGROUND --- */
+      body {
+        background-color: #fffaf3; /* Cream background */
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+      a {
+        text-decoration: none;
+      }
+
+      /* --- NAVBAR --- */
+      .navbar-custom {
+        background-color: #8f8377; /* Taupe background */
+      }
+      .navbar-custom .navbar-brand,
+      .navbar-custom .nav-link {
+        color: #fff !important;
+        font-weight: 500;
+      }
+      .navbar-custom .nav-link:hover {
+        color: #ffffffcc !important;
+      }
+      .navbar-custom .nav-link.active {
+        color: #ffa94d !important; /* highlight Quiz link */
+      }
+      .logo {
+        width: 45px;
+        height: 45px;
+        margin-right: 8px;
+        border-radius: 50%;
+        background: url("{{ url_for('static', filename='images/icon.png') }}")
+          no-repeat center center / cover;
+      }
+
+      /* --- PAGE WRAPPER --- */
+      .page-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1.5rem 2rem;
+      }
+
+      /* --- SCORE HEADER --- */
+      .score-header {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #3e3e3e;
+        margin-top: 3rem;
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+      .score-header span {
+        color: #f58c03; /* orange accent */
+      }
+
+      /* --- BIG ORANGE BUTTON --- */
+      .btn-try-again {
+        display: block;
+        margin: 0 auto 1.5rem auto;
+        background-color: #ffa94d; /* orange */
+        border: none;
+        border-radius: 8px;
+        padding: 0.8rem 1.6rem;
+        color: #fff;
+        font-weight: 700;
+        font-size: 1.1rem;
+        cursor: pointer;
+      }
+      .btn-try-again:hover {
+        background-color: #ff922b; /* slightly darker orange */
+      }
+
+      /* --- SMALLER GRAY BUTTONS (Back to Home/Overview) --- */
+      .btn-mini {
+        display: inline-block;
+        background-color: #e8dfd6; /* taupe-ish */
+        border: 2px solid #ccc;
+        border-radius: 6px;
+        padding: 0.5rem 1.2rem;
+        color: #333;
+        font-weight: 600;
+        cursor: pointer;
+        margin: 0.5rem;
+        text-decoration: none;
+      }
+      .btn-mini:hover {
+        background-color: #ccc;
+        color: #fff;
+      }
+
+      .btn-container {
+        text-align: center;
+        margin-top: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-custom navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="{{ url_for('home') }}">
+          <div class="logo"></div>
+          <span>Real or Rendered?</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('transition') }}">Overview</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=1) }}">Anatomy</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=2) }}">Lighting</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=3) }}">Texture</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=4) }}">Symmetry</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=6) }}">Symbolism</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=5) }}">Detail</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('quiz', question_id=1) }}">Quiz</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- PAGE WRAPPER -->
+    <div class="page-wrapper">
+      <!-- Score Header -->
+      <div class="score-header">
+        Your total score:
+        <span>{{ score }}</span> / <span>{{ total }}</span>
+      </div>
+
+      <!-- Try Again Button -->
+      <button
+        class="btn-try-again"
+        onclick="window.location.href='{{ url_for('quiz', question_id=1) }}'"
+      >
+        Try it again
+      </button>
+
+      <!-- Smaller buttons row -->
+      <div class="btn-container">
+        <a href="{{ url_for('home') }}" class="btn-mini">Back to 🏠Home</a>
+        <a href="{{ url_for('transition') }}" class="btn-mini">Back to 📜Overview</a>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    ></script>
+  </body>
+</html>

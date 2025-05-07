@@ -1,10 +1,47 @@
 [
   {
     "id": 1,
-    "question": "Which one is more likely to be human-made?",
+    "question": "Which one is more likely to be human-made? ",
     "optionA": "anatomy_ai_quiz.jpg",
     "optionB": "anatomy_real_quiz.jpg",
-    "correct": "A",
-    "related": "Anatomy & Structure"
+    "correct": "B",
+    "related": "Anatomy & Structure",
+    "feedbackCorrect": "See how the proportions of the face and hands look more natural here.",
+    "feedbackWrong": "This one has melting eyes and weird fingers– it's likely AI.",
+    "hintWrong": "Hint: take a closer look at the artwork you chose—did you see any disproportionate physical features?"
+  },
+  {
+    "id": 2,
+    "question": "Which one is more likely to be human-made? ",
+    "optionA": "texture_ai_quiz.jpg",
+    "optionB": "texture_real_quiz.jpg",
+    "correct": "B",
+    "related": "Texture & Surface",
+    "feedbackCorrect": "Nice work. The painterly texture has varied brushstrokes and subtle imperfections.",
+    "feedbackWrong": "Overly smooth surfaces and airbrushed clothing are big giveaways for AI.",
+    "hintWrong": "Hint: take a closer look at the clothing in the artwork on the left—notice the overly smooth, airbrushed look?"
+  },
+  {
+    "id": 3,
+    "question": "Which one is more likely to be human-made? ",
+    "optionA": "light_ai_quiz.png",
+    "optionB": "light_real_quiz.png",
+    "correct": "B",
+    "related": "Shadows & Light",
+    "feedbackCorrect": "Correct. The lighting angles are consistent and physically plausible in the real painting.",
+    "feedbackWrong": "AI renders may have inconsistent shadows or confusing highlights.",
+    "hintWrong": "Hint: check if the shadows look correct for the chosen object or figure."
+  },
+  {
+    "id": 4,
+    "question": "Which one is more likely to be human-made? ",
+    "optionA": "symbolism_ai_quiz.jpg",
+    "optionB": "symbolism_human_quiz.jpg",
+    "optionC": "symbolism_ai_2_quiz.jpg",
+    "correct": "B",
+    "related": "Symbolism & Intent",
+    "feedbackCorrect": "Look at the deeper narrative and accurate detail—this suggests genuine intent and historical context.",
+    "feedbackWrong": "The other images have random futuristic elements or inconsistent details, typical of AI attempts at symbolic art.",
+    "hintWrong": "Hint: do you notice a cohesive story or correct historical detail in the piece you chose?"
   }
 ]

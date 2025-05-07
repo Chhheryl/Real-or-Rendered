@@ -48,6 +48,7 @@
         max-width: 1200px;
         margin: 0 auto;
         padding: 1.5rem 2rem;
+        position: relative; /* so we can absolutely-position children if we like */
       }
 
       /* ---------- QUIZ PROMPT ---------- */
@@ -66,7 +67,7 @@
         color: #777;
       }
 
-      /* ---------- TWO CHOICES ROW ---------- */
+      /* ---------- CHOICES ROW ---------- */
       .choices-row {
         display: flex;
         justify-content: center;
@@ -74,25 +75,37 @@
         flex-wrap: wrap;
       }
       .choice-container {
-        position: relative;
+        position: relative; /* for the radio and image */
         width: 300px;
         border-radius: 40px;
-        background-color: #fff;
         overflow: hidden; /* corners match the container rounding */
         text-align: center;
+        border: 10px solid #c7c7c7; /* gray by default */
+        background-color: #fff;
+        transition: background-color 0.3s, border-color 0.3s;
+        cursor: pointer;
       }
-      .choice-left {
-        border: 10px solid #ffa94d; /* orange border */
+      /* Chosen (orange) */
+      .choice-container.selected {
+        background-color: #ffe1c2; /* light orange */
+        border-color: #ffa94d; /* darker orange border */
       }
-      .choice-right {
-        border: 10px solid #c7c7c7; /* gray border */
+      /* Correct (green) */
+      .choice-container.correct {
+        background-color: #d8f5d4;
+        border-color: #69db7c;
       }
+      /* Incorrect (red) */
+      .choice-container.incorrect {
+        background-color: #ffe3e3;
+        border-color: #ffa8a8;
+      }
+
       .choice-image {
         width: 100%;
-        height: 380px; /* ensure same size for both images */
-        object-fit: cover; 
+        height: 380px; /* ensure same size for images */
+        object-fit: cover;
       }
-      /* “Zoom in” + radio button area at bottom center */
       .choice-radio {
         position: absolute;
         bottom: 10px;
@@ -111,7 +124,7 @@
       .zoom-text {
         font-size: 0.85rem;
         color: #777;
-        cursor: pointer; /* show pointer on hover */
+        cursor: pointer;
       }
 
       /* ---------- SUBMIT BUTTON ---------- */
@@ -133,8 +146,104 @@
         color: #fff;
       }
 
+      /* ---------- CORRECT BUBBLE (Positioned Outside Image) ---------- */
+      #correctBubble {
+        position: absolute; /* We'll set top/left in JS */
+        max-width: 220px;
+        background-color: #ffe9a3; /* pale yellow/orange */
+        border: 2px solid #ffc966;
+        border-radius: 6px;
+        padding: 0.8rem;
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);
+        display: none; /* hidden initially */
+        z-index: 999;
+      }
+      #correctBubble p {
+        margin: 0 0 0.4rem;
+      }
+      #correctBubble button {
+        background-color: #ffa94d;
+        border: none;
+        padding: 0.4rem 0.8rem;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      /* We’ll attach an arrow on the left side by default. */
+      #correctBubble::before {
+        content: "";
+        position: absolute;
+        top: 20px;
+        left: -20px; /* arrow on left side by default */
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent #ffe9a3 transparent transparent;
+      }
+      /* If we need an arrow on the right, we can toggle a class .arrow-right */
+      #correctBubble.arrow-right::before {
+        left: auto;
+        right: -20px;
+        border-color: transparent transparent transparent #ffe9a3;
+      }
+
+      /* ---------- HINT BAR (WRONG) ---------- */
+      /* Covers entire page horizontally, fixed in center. */
+      #hintBar {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #ffe9a3; /* pale yellow */
+        border: 2px solid #ffc966;
+        border-radius: 6px;
+        padding: 1rem 1.5rem;
+        max-width: 800px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);
+        display: none; /* hidden until user picks wrong */
+        z-index: 999;
+      }
+      #hintBar p {
+        margin: 0.4rem 0;
+      }
+      #hintBar a {
+        color: #d07913;
+        font-weight: 700;
+        text-decoration: none;
+        margin: 0 0.3rem;
+      }
+      #hintBar button {
+        background-color: #ffa94d;
+        border: none;
+        padding: 0.4rem 0.8rem;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      /* ---------- NEXT QUESTION BUTTON ---------- */
+      .next-row {
+        text-align: center;
+        margin-top: 2rem;
+        display: none; /* shown after “Got It” */
+      }
+      .btn-next {
+        background-color: #ffe98a;
+        border: 2px solid #ffc966;
+        border-radius: 8px;
+        padding: 0.6rem 1.2rem;
+        color: #333;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .btn-next:hover {
+        background-color: #ffdb65;
+        color: #fff;
+      }
+
       /* ---------- ZOOM MODAL ---------- */
-      .modal-content {
+      .zoom-modal .modal-content {
         border-radius: 8px;
       }
     </style>
@@ -143,7 +252,10 @@
     <!-- NAVBAR -->
     <nav class="navbar navbar-custom navbar-expand-lg">
       <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="{{ url_for('home') }}">
+        <a
+          class="navbar-brand d-flex align-items-center"
+          href="{{ url_for('home') }}"
+        >
           <div class="logo"></div>
           <span>Real or Rendered?</span>
         </a>
@@ -167,25 +279,41 @@
               <a class="nav-link" href="{{ url_for('transition') }}">Overview</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('learn', lesson_id=1) }}">Anatomy</a>
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=1) }}"
+                >Anatomy</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('learn', lesson_id=2) }}">Lighting</a>
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=2) }}"
+                >Lighting</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('learn', lesson_id=3) }}">Texture</a>
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=3) }}"
+                >Texture</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('learn', lesson_id=4) }}">Symmetry</a>
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=4) }}"
+                >Symmetry</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('learn', lesson_id=6) }}">Symbolism</a>
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=6) }}"
+                >Symbolism</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('learn', lesson_id=5) }}">Detail</a>
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=5) }}"
+                >Detail</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="{{ url_for('quiz', question_id=1) }}">Quiz</a>
+              <a
+                class="nav-link active"
+                href="{{ url_for('quiz', question_id=1) }}"
+                >Quiz</a
+              >
             </li>
           </ul>
         </div>
@@ -202,10 +330,15 @@
         </div>
       </div>
 
-      <form method="POST">
+      <!-- QUIZ FORM -->
+      <form id="quizForm">
         <div class="choices-row">
-          <!-- Left (Option A) -->
-          <label class="choice-container choice-left">
+          <!-- Option A -->
+          <label
+            class="choice-container"
+            data-choice="A"
+            {% if question.optionA is not defined %}style="display:none"{% endif %}
+          >
             <img
               src="{{ url_for('static', filename='images/' + question.optionA) }}"
               alt="Option A"
@@ -213,12 +346,20 @@
             />
             <div class="choice-radio">
               <input type="radio" name="choice" value="A" required />
-              <span class="zoom-text" data-img="{{ url_for('static', filename='images/' + question.optionA) }}">Zoom in</span>
+              <span
+                class="zoom-text"
+                data-img="{{ url_for('static', filename='images/' + question.optionA) }}"
+                >Zoom in</span
+              >
             </div>
           </label>
 
-          <!-- Right (Option B) -->
-          <label class="choice-container choice-right">
+          <!-- Option B -->
+          <label
+            class="choice-container"
+            data-choice="B"
+            {% if question.optionB is not defined %}style="display:none"{% endif %}
+          >
             <img
               src="{{ url_for('static', filename='images/' + question.optionB) }}"
               alt="Option B"
@@ -226,9 +367,35 @@
             />
             <div class="choice-radio">
               <input type="radio" name="choice" value="B" required />
-              <span class="zoom-text" data-img="{{ url_for('static', filename='images/' + question.optionB) }}">Zoom in</span>
+              <span
+                class="zoom-text"
+                data-img="{{ url_for('static', filename='images/' + question.optionB) }}"
+                >Zoom in</span
+              >
             </div>
           </label>
+
+          <!-- Option C (only if the JSON has it) -->
+          {% if question.optionC is defined %}
+          <label
+            class="choice-container"
+            data-choice="C"
+          >
+            <img
+              src="{{ url_for('static', filename='images/' + question.optionC) }}"
+              alt="Option C"
+              class="choice-image"
+            />
+            <div class="choice-radio">
+              <input type="radio" name="choice" value="C" required />
+              <span
+                class="zoom-text"
+                data-img="{{ url_for('static', filename='images/' + question.optionC) }}"
+                >Zoom in</span
+              >
+            </div>
+          </label>
+          {% endif %}
         </div>
 
         <!-- Submit Button -->
@@ -236,10 +403,38 @@
           <button class="btn-submit" type="submit">Submit</button>
         </div>
       </form>
+
+      <!-- Correct Bubble (single) -->
+      <div id="correctBubble">
+        <p id="correctBubbleText"></p>
+        <button type="button" id="btnBubbleGotIt">Got it</button>
+      </div>
+
+      <!-- Hint bar for WRONG guesses -->
+      <div id="hintBar">
+        <p id="hintText"></p>
+        <p>
+          Back to the related topic:
+          <a href="#" id="hintLink"></a>
+          <button type="button" id="btnHintGotIt">Got it</button>
+        </p>
+      </div>
+
+      <!-- Next Question Button -->
+      <div class="next-row" id="nextRow">
+        <button class="btn-next" id="btnNext">
+          Next Question
+        </button>
+      </div>
     </div>
 
     <!-- ZOOM MODAL -->
-    <div class="modal fade" id="zoomModal" tabindex="-1" aria-hidden="true">
+    <div
+      class="modal fade zoom-modal"
+      id="zoomModal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content p-3">
           <div class="modal-header">
@@ -263,7 +458,126 @@
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
     ></script>
     <script>
-      // Handle "Zoom in" clicks -> show modal with larger image
+      // 1) Data from question
+      const correctAnswer = "{{ question.correct }}";
+      const feedbackCorrect = "{{ question.feedbackCorrect|escape|default('Great job!') }}";
+      const hintWrong = "{{ question.hintWrong|escape|default('Look carefully at the details...') }}";
+      const relatedTopic = "{{ question.related|escape|default('Anatomy & Structure') }}";
+
+      // 2) Radio selection -> highlight container
+      const choiceContainers = document.querySelectorAll('.choice-container');
+      const quizForm = document.getElementById('quizForm');
+      choiceContainers.forEach((container) => {
+        const radio = container.querySelector('input[type="radio"]');
+        if (radio) {
+          radio.addEventListener('change', () => {
+            choiceContainers.forEach((c) => c.classList.remove('selected'));
+            container.classList.add('selected');
+          });
+        }
+      });
+
+      // Hide bubble/hint at start
+      const correctBubble = document.getElementById('correctBubble');
+      const correctBubbleText = document.getElementById('correctBubbleText');
+      const hintBar = document.getElementById('hintBar');
+      correctBubble.style.display = 'none';
+      hintBar.style.display = 'none';
+
+      // 3) On Submit -> check correctness
+      quizForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const selectedRadio = document.querySelector('input[name="choice"]:checked');
+        if (!selectedRadio) return;
+
+        const chosenValue = selectedRadio.value;
+        const chosenContainer = document.querySelector('.choice-container[data-choice="' + chosenValue + '"]');
+
+        // reset states
+        choiceContainers.forEach((c) => {
+          c.classList.remove('correct', 'incorrect');
+        });
+        correctBubble.style.display = 'none';
+        hintBar.style.display = 'none';
+
+        // Mark correct container in green
+        const correctContainer = document.querySelector('.choice-container[data-choice="' + correctAnswer + '"]');
+        if (correctContainer) {
+          correctContainer.classList.add('correct');
+        }
+
+        if (chosenValue === correctAnswer) {
+          // Hide orange selection
+          chosenContainer.classList.remove('selected');
+
+          // Show correct bubble outside the image
+          positionCorrectBubble(chosenContainer); // see function below
+          correctBubbleText.innerText = feedbackCorrect;
+          correctBubble.style.display = 'block';
+        } else {
+          // Mark chosen as incorrect
+          chosenContainer.classList.remove('selected');
+          chosenContainer.classList.add('incorrect');
+
+          // Show hint bar
+          document.getElementById('hintText').innerText = hintWrong;
+          document.getElementById('hintLink').innerText = relatedTopic;
+          document.getElementById('hintLink').href =
+            "{{ url_for('learn', lesson_id=1) }}"; // or dynamic map
+          hintBar.style.display = 'block';
+        }
+      });
+
+      // 4) Position the correct bubble (left or right) so it doesn't cover image
+      function positionCorrectBubble(container) {
+        // get bounding box of container
+        const rect = container.getBoundingClientRect();
+        const bubbleRect = correctBubble.getBoundingClientRect();
+
+        // We'll place the bubble so its top is near the container's top
+        // but off to the left or right side.
+        // Decide left or right based on container's x:
+        // if container is left half of screen, place bubble to the right side
+        // if container is right half, place bubble to the left side
+        const pageMid = window.innerWidth / 2;
+        const containerCenter = rect.left + rect.width / 2;
+
+        let topPos = rect.top + window.scrollY + 30; // a bit below top
+        let leftPos;
+
+        if (containerCenter < pageMid) {
+          // Container is on left side => bubble on the right
+          correctBubble.classList.remove('arrow-right');
+          // place bubble to the right of container
+          leftPos = rect.right + window.scrollX + 10;
+        } else {
+          // Container is on right side => bubble on the left
+          correctBubble.classList.add('arrow-right');
+          leftPos = rect.left + window.scrollX - bubbleRect.width - 10;
+        }
+
+        correctBubble.style.top = topPos + 'px';
+        correctBubble.style.left = leftPos + 'px';
+      }
+
+      // 5) “Got it” => hide bubble/hint, show Next
+      document.getElementById('btnBubbleGotIt').addEventListener('click', () => {
+        correctBubble.style.display = 'none';
+        document.getElementById('nextRow').style.display = 'block';
+      });
+      document.getElementById('btnHintGotIt').addEventListener('click', () => {
+        hintBar.style.display = 'none';
+        document.getElementById('nextRow').style.display = 'block';
+      });
+
+      // 6) Next question
+      document.getElementById('btnNext').addEventListener('click', () => {
+        const currentQ = parseInt("{{ question.id }}");
+        const nextQ = currentQ + 1;
+        window.location.href = "{{ url_for('quiz', question_id=1) }}".replace("1", nextQ);
+      });
+
+      // 7) Zoom in
       document.querySelectorAll('.zoom-text').forEach((z) => {
         z.addEventListener('click', (e) => {
           e.preventDefault();
