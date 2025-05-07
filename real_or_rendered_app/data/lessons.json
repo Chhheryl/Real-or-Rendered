@@ -13,53 +13,45 @@
         "label": "Misaligned eyes",
         "x_pct": 45,
         "y_pct": 25,
-        "zoom_ai": "zoom_ai_eyes.jpg",
-        "zoom_real": "zoom_real_eyes.jpg",
+        "zoom_ai": "ai_zoom_eyes.jpg",
+        "zoom_real": "real_zoom_eyes.jpg",
         "explanation": "AI-generated eyes appear asymmetrical or misaligned, especially when the face is turned."
-    },
+      },
       {
         "id": 2,
         "label": "Melting hands",
         "x_pct": 30,
-        "y_pct":70,
+        "y_pct": 70,
         "zoom_ai": "ai_zoom_hand.jpg",
         "zoom_real": "real_zoom_hand.jpg",
-        "explanation": "AI struggles with hand anatomy. See the distorted fingers and inconsistent shading."
-      },
-    {
-        "id": 3,
-        "label": "Melting limbs",
-        "x_pct": 70,
-        "y_pct":65,
-        "zoom_ai": "ai_zoom_limbs.jpg",
-        "zoom_real": "real_zoom_limbs.jpg",
-        "explanation": "AI-generated limbs may appear warped, blurred, or inconsistently attached to the body, breaking anatomical logic."
+        "explanation": "AI struggles with hands. Notice distorted fingers and inconsistent shading."
       }
     ]
   },
   {
     "id": 2,
     "title": "Lighting & Shadows",
-    "tip": "Do the shadows make sense based on the light source?",
+    "tip": "Check if shadows match the light source direction.",
     "images": {
       "ai": "lighting_ai.jpg",
       "real": "lighting_real.jpg"
     },
     "hotspots": [
-    {
-      "id": 1,
-      "label": "Inconsistent shadow direction",
-      "x_pct": 40,
-      "y_pct": 52,
-      "zoom_ai": "zoom_ai_shadow_angle.jpg",
-      "zoom_real": "zoom_real_shadow_angle.jpg",
-      "explanation": "AI sometimes generates lighting where shadows fall in multiple directions, defying consistent light source logic."
-    }]
+      {
+        "id": 1,
+        "label": "Inconsistent shadow direction",
+        "x_pct": 40,
+        "y_pct": 50,
+        "zoom_ai": "ai_zoom_inconsistent_shadow.jpg",
+        "zoom_real": "real_zoom_correct_shadow.jpg",
+        "explanation": "AI may produce conflicting light angles. Real paintings keep shadows consistent with a single light source."
+      }
+    ]
   },
   {
     "id": 3,
     "title": "Textures & Surfaces",
-    "tip": "Watch for overly smooth or plastic-like textures.",
+    "tip": "Look for overly smooth or plastic-like textures in AI art.",
     "images": {
       "ai": "texture_ai.jpg",
       "real": "texture_real.jpg"
@@ -70,16 +62,16 @@
         "label": "Plastic-like skin",
         "x_pct": 32,
         "y_pct": 32,
-        "zoom_ai": "zoom_ai_plastic_highlight.jpg",
-        "zoom_real": "zoom_real_surface_highlight.jpg",
-        "explanation": "AI-generated skin and backgrounds often appear overly smooth or plastic-like, lacking realistic surface texture or detail."
-    }
+        "zoom_ai": "ai_zoom_plastic_skin.jpg",
+        "zoom_real": "real_zoom_skin_texture.jpg",
+        "explanation": "AI-generated skin may appear plastic or too perfect, lacking realistic pore or brush texture."
+      }
     ]
   },
   {
     "id": 4,
     "title": "Symmetry & Composition",
-    "tip": "Perfect symmetry may be a red flag.",
+    "tip": "Overly perfect symmetry can be suspicious.",
     "images": {
       "ai": "symmetry_ai.jpg",
       "real": "symmetry_real.jpg"
@@ -89,7 +81,7 @@
   {
     "id": 5,
     "title": "Coherence in Detail",
-    "tip": "Look for inconsistencies and object blending errors.",
+    "tip": "Check for strange merges or ‘floating’ objects.",
     "images": {
       "ai": "detail_ai.jpg",
       "real": "detail_real.jpg"
@@ -99,7 +91,7 @@
   {
     "id": 6,
     "title": "Symbolism & Intent",
-    "tip": "Can you sense emotional or narrative intention?",
+    "tip": "Is there a cohesive narrative or historically accurate symbolism?",
     "images": {
       "ai": "symbolism_ai.jpg",
       "real": "symbolism_real.jpg"

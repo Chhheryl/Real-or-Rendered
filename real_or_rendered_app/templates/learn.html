@@ -100,12 +100,19 @@
       }
       .artwork-col {
         flex: 1 1 300px;
-        max-width: 500px; /* so images don't get too large on wide screens */
+        max-width: 500px;
         text-align: center;
       }
       .image-container {
         position: relative;
         display: inline-block;
+      }
+
+      /* Make both images the same height */
+      .artwork-col img {
+        width: 100%;
+        height: 460px; /* keep them the same height */
+        object-fit: cover !important;
       }
 
       /* Artwork captions & titles */
@@ -165,8 +172,6 @@
       .nav-right {
         margin-left: auto;
       }
-
-      /* Buttons: tan for “Back”/“Home”, pink for “Next Cue” */
       .btn-tan {
         background-color: #d9c7b8;
         border: 2px solid #bcae9f;
@@ -197,23 +202,42 @@
       }
 
       /* ------------------------------------------
-         MODAL STYLING
+         SIDE PANEL (pink) - Replaces the old modal
       ------------------------------------------ */
-      .modal-content {
-        border-radius: 8px;
+      #hotspotSidePanel {
+        position: fixed;
+        top: 0;
+        right: -400px; /* start hidden */
+        width: 380px;
+        height: 100%;
+        background-color: #ffd6db; /* pink */
+        box-shadow: -3px 0 6px rgba(0,0,0,0.2);
+        transition: right 0.3s ease;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
       }
-      .modal-header h5 {
-        font-size: 1.2rem;
+      #hotspotSidePanel.open {
+        right: 0; /* slides in */
       }
-      .modal-body img {
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        margin-bottom: 1rem;
+      .sidepanel-header {
+        background-color: #f8b8bd;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: bold;
       }
-      .artwork-col img {
-        width: 100%;
-        height: 460px;
-        object-fit: cover !important;
+      .sidepanel-content {
+        padding: 1rem;
+        overflow-y: auto;
+        flex: 1;
+      }
+      .sidepanel-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
       }
     </style>
   </head>
@@ -238,7 +262,7 @@
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul class="navbar-nav mb-2 mb-lg-0">
-            <!-- Home (no lesson.id here, so we check request.endpoint) -->
+            <!-- Home -->
             <li class="nav-item">
               <a
                 class="nav-link {% if request.endpoint == 'home' %}active{% endif %}"
@@ -246,7 +270,7 @@
                 >Home</a
               >
             </li>
-            <!-- Overview (same logic) -->
+            <!-- Overview -->
             <li class="nav-item">
               <a
                 class="nav-link {% if request.endpoint == 'transition' %}active{% endif %}"
@@ -262,7 +286,7 @@
                 >Anatomy</a
               >
             </li>
-            <!-- Lighting & Shadows (lesson 2) -->
+            <!-- Lighting (lesson 2) -->
             <li class="nav-item">
               <a
                 class="nav-link {% if lesson and lesson.id == 2 %}active{% endif %}"
@@ -319,7 +343,6 @@
           </div>
         </div>
         <div class="unlocked-info">
-          <!-- Show “lesson.id / 6” based on the current lesson ID -->
           🔓 You’ve unlocked: {{ lesson.id }}/6 cues
         </div>
       </div>
@@ -398,53 +421,58 @@
       </div>
     </div>
 
-    <!-- ZOOM MODAL -->
-    <div class="modal fade" id="zoomModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content p-3">
-          <div class="modal-header">
-            <h5 class="modal-title">Hotspot Details</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <p id="modal-explanation"></p>
-            <div class="row">
-              <div class="col-md-6 text-center">
-                <h6>AI</h6>
-                <img id="modal-ai" class="img-fluid" />
-              </div>
-              <div class="col-md-6 text-center">
-                <h6>Human</h6>
-                <img id="modal-real" class="img-fluid" />
-              </div>
-            </div>
-          </div>
-        </div>
+    <!-- SIDE PANEL (pink), replacing the old modal -->
+    <div id="hotspotSidePanel">
+      <div class="sidepanel-header">
+        <span id="panelTitle">Hotspot Details</span>
+        <button class="sidepanel-close" id="btnClosePanel">&times;</button>
       </div>
+      <div class="sidepanel-content" id="panelContent"></div>
     </div>
 
-    <!-- BOOTSTRAP + HOTSPOT SCRIPT -->
+    <!-- BOOTSTRAP JS -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
     ></script>
+
+    <!-- HOTSPOT SCRIPT: open the pink side panel -->
     <script>
-      // Show zoom modal when hotspot is clicked
+      const sidePanel = document.getElementById("hotspotSidePanel");
+      const panelTitle = document.getElementById("panelTitle");
+      const panelContent = document.getElementById("panelContent");
+      const btnClosePanel = document.getElementById("btnClosePanel");
+
+      // Close the side panel
+      btnClosePanel.addEventListener("click", () => {
+        sidePanel.classList.remove("open");
+      });
+
+      // On hotspot click -> fill side panel, then open
       document.querySelectorAll(".hotspot").forEach((spot) => {
         spot.addEventListener("click", () => {
+          const label = spot.getAttribute("data-label");
           const aiImg = spot.getAttribute("data-zoom-ai");
           const realImg = spot.getAttribute("data-zoom-real");
           const explanation = spot.getAttribute("data-explanation");
 
-          document.getElementById("modal-ai").src = aiImg;
-          document.getElementById("modal-real").src = realImg;
-          document.getElementById("modal-explanation").textContent = explanation;
+          // Title is the label
+          panelTitle.textContent = label;
 
-          new bootstrap.Modal(document.getElementById("zoomModal")).show();
+          // Content: explanation + both images
+          panelContent.innerHTML = `
+            <p style="margin-bottom:1rem;">${explanation}</p>
+            <div class="mb-3">
+              <strong>AI Zoom:</strong><br/>
+              <img src="${aiImg}" alt="AI Zoom" class="img-fluid" />
+            </div>
+            <div>
+              <strong>Human Zoom:</strong><br/>
+              <img src="${realImg}" alt="Real Zoom" class="img-fluid" />
+            </div>
+          `;
+
+          // Slide the panel in
+          sidePanel.classList.add("open");
         });
       });
     </script>
