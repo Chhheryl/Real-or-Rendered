@@ -2,58 +2,309 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Select a Topic</title>
+    <title>Overview</title>
+    <!-- Bootstrap 5 CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
     <style>
-      .card:hover {
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        transform: scale(1.02);
+      /* ---------------- NAVBAR ---------------- */
+      body {
+        background-color: #fffaf3;
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+      .top-nav {
+        background-color: #8f8377; /* Taupe background */
+      }
+      .top-nav .navbar-brand,
+      .top-nav .nav-link {
+        color: #fff !important;
+        font-weight: 500;
+      }
+      .top-nav .nav-link:hover {
+        color: #ffffffcc !important;
+      }
+      /* Highlight “Overview” link in bright orange */
+      .top-nav .nav-link.active {
+        color: #ffa94d !important;
+      }
+
+      /* Optional brand logo */
+      .logo {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        margin-right: 8px;
+        background: url("{{ url_for('static', filename='images/icon.png') }}")
+          no-repeat center center / cover;
+      }
+
+      /* --------------- PAGE WRAPPER --------------- */
+      .page-wrapper {
+        padding: 2rem 1rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      /* --------------- TOP INFO NOTE & BIG ORANGE BOX --------------- */
+      .info-line {
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+        color: #666;
+      }
+      .info-line .info-icon {
+        color: #5b8dc9; /* blue-ish icon color for “i” */
+        margin-right: 4px;
+      }
+
+      /* Big orange rectangle for “Start Guided Tour” */
+      .start-tour-box {
+        display: block;
+        width: 280px;
+        height: 120px;
+        background-color: #fca242;
+        color: #fff;
+        font-size: 1.4rem;
+        font-weight: 600;
+        border-radius: 8px;
+        text-align: center;
+        line-height: 120px; /* vertical centering */
+        margin: 0 auto; /* center horizontally */
+        text-decoration: none;
+      }
+      .start-tour-box:hover {
+        background-color: #f68c28;
+        color: #fff;
+      }
+
+      /* --------------- OR CHOOSE A TOPIC TEXT --------------- */
+      .choose-text {
+        text-align: center;
+        margin: 2rem 0 1.5rem;
+        font-size: 1rem;
+        color: #777;
+      }
+
+      /* --------------- TOPIC TILES --------------- */
+      .topic-tiles {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* 3 columns */
+        gap: 1.5rem;
+        justify-items: center;
+        align-items: start;
+      }
+      .tile {
+        display: flex;
+        align-items: center;
+        border-radius: 8px;
+        text-decoration: none;
+        color: #333;
+        width: 100%;
+        max-width: 320px;
+        min-height: 100px;
+        padding: 1rem;
         transition: 0.3s;
+      }
+      .tile:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+      .tile-pink {
+        background-color: #fce2e2;
+        border: 3px solid #f8b8bd;
+      }
+      .tile-tan {
+        background-color: #d9c7b8;
+        border: 2px solid #bcae9f;
+      }
+      .tile-icon {
+        width: 60px;
+        height: 60px;
+        margin-right: 0.75rem;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        border-radius: 4px;
+      }
+      .tile-text h5 {
+        margin: 0 0 0.3rem;
+        font-size: 1rem;
+        font-weight: 700;
+      }
+      .tile-text p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #555;
+      }
+
+      /* Example responsive stacking (optional) */
+      /*
+      @media (max-width: 992px) {
+        .topic-tiles {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 576px) {
+        .topic-tiles {
+          grid-template-columns: 1fr;
+        }
+      }
+      */
+
+      .tooltip {
+        z-index: 9999;
       }
     </style>
   </head>
-  <body class="p-4">
-    <h2 class="text-center mb-4">What You’ll Learn</h2>
-    <div class="container">
-      <div class="row g-4">
-        {% for lesson in lessons %}
-        <div class="col-md-4">
-          <a
-            href="{{ url_for('learn', lesson_id=lesson.id) }}"
-            class="text-decoration-none text-dark"
-          >
-            <div class="card h-100">
-              <img
-                src="{{ url_for('static', filename='images/' + lesson.images.ai) }}"
-                class="card-img-top img-fluid"
-                style="max-height: 160px; object-fit: cover"
-                alt="{{ lesson.title }}"
-              />
-              <div class="card-body">
-                <h5 class="card-title">{{ lesson.title }}</h5>
-                <p class="card-text">{{ lesson.tip }}</p>
-              </div>
-            </div>
-          </a>
+  <body>
+    <!-- TOP NAV -->
+    <nav class="navbar top-nav navbar-expand-lg">
+      <div class="container">
+        <!-- Brand (with optional logo) -->
+        <a class="navbar-brand d-flex align-items-center" href="{{ url_for('home') }}">
+          <div class="logo"></div>
+          <span>Real or Rendered?</span>
+        </a>
+        <!-- Mobile toggler -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Nav links -->
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <!-- Home -->
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+            </li>
+            <!-- “Overview” is active -->
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('transition') }}">Overview</a>
+            </li>
+            <!-- Anatomy (lesson 1) -->
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('learn', lesson_id=1) }}"
+                >Anatomy</a
+              >
+            </li>
+            <!-- Lighting (lesson 2) -->
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('learn', lesson_id=2) }}"
+                >Lighting</a
+              >
+            </li>
+            <!-- Texture (lesson 3) -->
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('learn', lesson_id=3) }}"
+                >Texture</a
+              >
+            </li>
+            <!-- Symmetry (lesson 4) -->
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('learn', lesson_id=4) }}"
+                >Symmetry</a
+              >
+            </li>
+            <!-- Symbolism (lesson 6) -->
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('learn', lesson_id=6) }}"
+                >Symbolism</a
+              >
+            </li>
+            <!-- Quiz -->
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="{{ url_for('quiz', question_id=1) }}"
+                >Quiz</a
+              >
+            </li>
+          </ul>
         </div>
+      </div>
+    </nav>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <div class="page-wrapper">
+      <!-- Info note & big orange box -->
+      <div class="text-center mb-4">
+        <div class="info-line">
+          <span class="info-icon">&#9432;</span>
+          Can’t decide which one to start with? Click
+          <strong>Start Guided Tour</strong> to learn step by step.
+        </div>
+        <!-- Big orange box link -->
+        <a
+          href="{{ url_for('learn', lesson_id=1) }}"
+          class="start-tour-box"
+          data-bs-toggle="tooltip"
+          title="We’ll walk you through each clue, step by step."
+        >
+          Start Guided Tour
+        </a>
+      </div>
+
+      <!-- “Or choose a topic to begin learning” label -->
+      <div class="choose-text">
+        Or choose a topic to begin learning
+      </div>
+
+      <!-- Tiles row -->
+      <div class="topic-tiles">
+        {% for lesson in lessons %}
+          {% if lesson.id == 1 %}
+            <!-- FIRST TILE: pink styling -->
+            <a
+              href="{{ url_for('learn', lesson_id=lesson.id) }}"
+              class="tile tile-pink"
+            >
+              <div class="tile-text">
+                <h5>{{ lesson.title }}</h5>
+                <p>{{ lesson.tip }}</p>
+              </div>
+            </a>
+          {% else %}
+            <!-- Other tiles: tan styling -->
+            <a
+              href="{{ url_for('learn', lesson_id=lesson.id) }}"
+              class="tile tile-tan"
+            >
+              <div class="tile-text">
+                <h5>{{ lesson.title }}</h5>
+                <p>{{ lesson.tip }}</p>
+              </div>
+            </a>
+          {% endif %}
         {% endfor %}
       </div>
     </div>
-    <div class="text-center mt-4">
-      <a
-        href="{{ url_for('learn', lesson_id=1) }}"
-        class="btn btn-outline-primary"
-        data-bs-toggle="tooltip"
-        title="Can’t decide which one to start with? We’ll walk you through each clue, step by step."
-      >
-        🔀 Start Guided Tour
-      </a>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Bootstrap 5 JS (for tooltips) -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    ></script>
     <script>
+      // Initialize tooltip on the "Start Guided Tour" box
       var tooltipTriggerList = [].slice.call(
         document.querySelectorAll('[data-bs-toggle="tooltip"]')
       );

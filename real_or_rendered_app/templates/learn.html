@@ -3,97 +3,402 @@
   <head>
     <meta charset="UTF-8" />
     <title>{{ lesson.title }}</title>
+    <!-- Bootstrap 5 CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <link
-      href="{{ url_for('static', filename='css/style.css') }}"
-      rel="stylesheet"
-    />
+    <style>
+      /* ------------------------------------------
+         GLOBAL / BODY
+      ------------------------------------------ */
+      body {
+        background-color: #fffaf3; /* Cream background */
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+      a {
+        text-decoration: none;
+      }
+
+      /* ------------------------------------------
+         NAVBAR
+      ------------------------------------------ */
+      .navbar-custom {
+        background-color: #8f8377; /* Taupe background */
+      }
+      .navbar-custom .navbar-brand,
+      .navbar-custom .nav-link {
+        color: #fff !important;
+        font-weight: 500;
+      }
+      .navbar-custom .nav-link:hover {
+        color: #ffffffcc !important;
+      }
+      /* Highlight active link in yellow */
+      .navbar-custom .nav-link.active {
+        color: #ffd600 !important;
+      }
+      .logo {
+        width: 45px;
+        height: 45px;
+        margin-right: 8px;
+        border-radius: 50%;
+        background: url("{{ url_for('static', filename='images/icon.png') }}")
+          no-repeat center center / cover;
+      }
+
+      /* ------------------------------------------
+         PAGE WRAPPER
+      ------------------------------------------ */
+      .page-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1.5rem 2rem;
+      }
+
+      /* ------------------------------------------
+         TOP HEADER: Title, tip, unlocked info
+      ------------------------------------------ */
+      .lesson-toprow {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .unlocked-info {
+        color: #666;
+        font-size: 0.95rem;
+      }
+
+      .lesson-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #3e3e3e;
+        margin: 0.5rem 0 0.2rem;
+      }
+      .lesson-subtitle {
+        font-size: 1rem;
+        color: #777;
+      }
+      .hover-hint {
+        text-align: right;
+        font-size: 0.9rem;
+        color: #777;
+        font-style: italic;
+        margin-top: 0.5rem;
+      }
+
+      /* ------------------------------------------
+         IMAGE / ARTWORK SECTION
+      ------------------------------------------ */
+      .artwork-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+      .artwork-col {
+        flex: 1 1 300px;
+        max-width: 500px; /* so images don't get too large on wide screens */
+        text-align: center;
+      }
+      .image-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      /* Artwork captions & titles */
+      .artwork-caption {
+        font-size: 0.8rem;
+        color: #999;
+        margin-top: 0.5rem;
+        font-style: italic;
+      }
+      .artwork-label {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #444;
+        margin-top: 0.25rem;
+      }
+
+      /* Hotspot styling (orange circles) */
+      .hotspot {
+        position: absolute;
+        display: block;
+        width: 60px;
+        height: 60px;
+        border: 3px solid orange;
+        border-radius: 50%;
+        background-color: transparent;
+        cursor: pointer;
+        transform: translate(-50%, -50%);
+        transition: background-color 0.2s ease;
+      }
+      .hotspot:hover {
+        background-color: rgba(255, 165, 0, 0.2);
+      }
+
+      /* ------------------------------------------
+         QUICK TIP
+      ------------------------------------------ */
+      .quick-tip {
+        margin-top: 1.5rem;
+        font-size: 0.95rem;
+      }
+
+      /* ------------------------------------------
+         BOTTOM NAVIGATION
+      ------------------------------------------ */
+      .bottom-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 3rem;
+      }
+      .nav-left {
+        display: flex;
+        gap: 1rem;
+      }
+      .nav-right {
+        margin-left: auto;
+      }
+
+      /* Buttons: tan for “Back”/“Home”, pink for “Next Cue” */
+      .btn-tan {
+        background-color: #d9c7b8;
+        border: 2px solid #bcae9f;
+        border-radius: 8px;
+        padding: 0.6rem 1rem;
+        color: #333;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .btn-tan:hover {
+        background-color: #b39b8a;
+        color: #fff;
+      }
+      .btn-pink {
+        background-color: #f8b8bd;
+        border: 2px solid #f2a6ac;
+        border-radius: 8px;
+        padding: 0.6rem 1.2rem;
+        color: #333;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .btn-pink:hover {
+        background-color: #f3969e;
+        color: #fff;
+      }
+
+      /* ------------------------------------------
+         MODAL STYLING
+      ------------------------------------------ */
+      .modal-content {
+        border-radius: 8px;
+      }
+      .modal-header h5 {
+        font-size: 1.2rem;
+      }
+      .modal-body img {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+      }
+      .artwork-col img {
+        width: 100%;
+        height: 460px;
+        object-fit: cover !important;
+      }
+    </style>
   </head>
-  <body class="p-4">
-    <!-- Top nav: Real or Rendered? / Home / Gallery / Quiz -->
-    <nav
-      class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2"
-    >
-      <span class="h4 mb-0">Real or Rendered?</span>
-      <ul class="nav">
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('home') }}">Home</a>
-        </li>
-        <li class="nav-item">
-          <a
-            class="nav-link active"
-            aria-current="page"
-            href="{{ url_for('transition') }}"
-            >Gallery</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('quiz', question_id=1) }}"
-            >Quiz</a
-          >
-        </li>
-      </ul>
-    </nav>
-
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <div class="text-muted">
-        <strong
-          >🔓 You’ve unlocked: {{ unlocked }} / {{ lessons|length }}
-          cues</strong
+  <body>
+    <!-- TOP NAVBAR -->
+    <nav class="navbar navbar-custom navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="{{ url_for('home') }}">
+          <div class="logo"></div>
+          <span>Real or Rendered?</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
-      </div>
-    </div>
-
-    <!-- Section subtitle -->
-
-    <h2>{{ lesson.title }}</h2>
-    <p class="text-muted">{{ lesson.tip }}</p>
-
-    <div class="row my-4">
-      <div class="col-md-6">
-        <h5>AI-generated artwork</h5>
-        <div class="image-container">
-          <img
-            src="{{ url_for('static', filename='images/' + lesson.images.ai) }}"
-            class="img-fluid"
-            id="ai-image"
-            height="300"
-          />
-          {% for spot in lesson.hotspots %}
-          <div
-            class="hotspot"
-            style="top: {{ spot.y_pct }}%; left: {{ spot.x_pct }}%;"
-            data-label="{{ spot.label }}"
-            data-zoom-ai="{{ url_for('static', filename='images/' + spot.zoom_ai) }}"
-            data-zoom-real="{{ url_for('static', filename='images/' + spot.zoom_real) }}"
-            data-explanation="{{ spot.explanation }}"
-          >
-            {{ spot.id }}
-          </div>
-          {% endfor %}
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <!-- Home (no lesson.id here, so we check request.endpoint) -->
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.endpoint == 'home' %}active{% endif %}"
+                href="{{ url_for('home') }}"
+                >Home</a
+              >
+            </li>
+            <!-- Overview (same logic) -->
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.endpoint == 'transition' %}active{% endif %}"
+                href="{{ url_for('transition') }}"
+                >Overview</a
+              >
+            </li>
+            <!-- Anatomy (lesson 1) -->
+            <li class="nav-item">
+              <a
+                class="nav-link {% if lesson and lesson.id == 1 %}active{% endif %}"
+                href="{{ url_for('learn', lesson_id=1) }}"
+                >Anatomy</a
+              >
+            </li>
+            <!-- Lighting & Shadows (lesson 2) -->
+            <li class="nav-item">
+              <a
+                class="nav-link {% if lesson and lesson.id == 2 %}active{% endif %}"
+                href="{{ url_for('learn', lesson_id=2) }}"
+                >Lighting &amp; Shadows</a
+              >
+            </li>
+            <!-- Texture (lesson 3) -->
+            <li class="nav-item">
+              <a
+                class="nav-link {% if lesson and lesson.id == 3 %}active{% endif %}"
+                href="{{ url_for('learn', lesson_id=3) }}"
+                >Texture</a
+              >
+            </li>
+            <!-- Symmetry (lesson 4) -->
+            <li class="nav-item">
+              <a
+                class="nav-link {% if lesson and lesson.id == 4 %}active{% endif %}"
+                href="{{ url_for('learn', lesson_id=4) }}"
+                >Symmetry</a
+              >
+            </li>
+            <!-- Symbolism (lesson 6) -->
+            <li class="nav-item">
+              <a
+                class="nav-link {% if lesson and lesson.id == 6 %}active{% endif %}"
+                href="{{ url_for('learn', lesson_id=6) }}"
+                >Symbolism</a
+              >
+            </li>
+            <!-- Quiz -->
+            <li class="nav-item">
+              <a
+                class="nav-link {% if request.endpoint == 'quiz' %}active{% endif %}"
+                href="{{ url_for('quiz', question_id=1) }}"
+                >Quiz</a
+              >
+            </li>
+          </ul>
         </div>
       </div>
-      <div class="col-md-6">
-        <h5>Human-made artwork</h5>
-        <img
-          src="{{ url_for('static', filename='images/' + lesson.images.real) }}"
-          class="img-fluid"
-          height="300"
-        />
+    </nav>
+
+    <!-- PAGE WRAPPER -->
+    <div class="page-wrapper">
+      <!-- TOP ROW: Title + Unlocked info -->
+      <div class="lesson-toprow mb-3">
+        <div>
+          <h1 class="lesson-title">{{ lesson.title }}</h1>
+          <div class="lesson-subtitle">{{ lesson.tip }}</div>
+          <div class="hover-hint">
+            *Hover on the image to view sketchy areas
+          </div>
+        </div>
+        <div class="unlocked-info">
+          <!-- Show “lesson.id / 6” based on the current lesson ID -->
+          🔓 You’ve unlocked: {{ lesson.id }}/6 cues
+        </div>
+      </div>
+
+      <!-- ARTWORK ROW: AI vs Human -->
+      <div class="artwork-row">
+        <!-- LEFT: AI Artwork -->
+        <div class="artwork-col">
+          <div class="image-container">
+            <img
+              src="{{ url_for('static', filename='images/' + lesson.images.ai) }}"
+              class="img-fluid"
+              alt="AI-generated artwork"
+            />
+            {% for spot in lesson.hotspots %}
+            <div
+              class="hotspot"
+              style="top: {{ spot.y_pct }}%; left: {{ spot.x_pct }}%;"
+              data-label="{{ spot.label }}"
+              data-zoom-ai="{{ url_for('static', filename='images/' + spot.zoom_ai) }}"
+              data-zoom-real="{{ url_for('static', filename='images/' + spot.zoom_real) }}"
+              data-explanation="{{ spot.explanation }}"
+            ></div>
+            {% endfor %}
+          </div>
+          <div class="artwork-caption">
+            La Comtesse de Belamy, created by OBVIOUS
+          </div>
+          <div class="artwork-label">AI-generated</div>
+        </div>
+
+        <!-- RIGHT: Human Artwork -->
+        <div class="artwork-col">
+          <img
+            src="{{ url_for('static', filename='images/' + lesson.images.real) }}"
+            class="img-fluid"
+            alt="Human-made artwork"
+          />
+          <div class="artwork-caption">
+            Self-Portrait by Catharina van Hemessen
+          </div>
+          <div class="artwork-label">Human-made</div>
+        </div>
+      </div>
+
+      <!-- QUICK TIP (optional) -->
+      {% if lesson.quick_tip %}
+      <div class="quick-tip">
+        <strong>💡 Quick tip:</strong> {{ lesson.quick_tip }}
+      </div>
+      {% endif %}
+
+      <!-- BOTTOM NAVIGATION -->
+      <div class="bottom-nav">
+        <div class="nav-left">
+          <a href="{{ url_for('home') }}" class="btn-tan">Back to 🏠Home</a>
+          <a href="{{ url_for('transition') }}" class="btn-tan">Back to 📖Overview</a>
+        </div>
+        <div class="nav-right">
+          {% if next_id %}
+          <a
+            href="{{ url_for('learn', lesson_id=next_id) }}"
+            class="btn-pink"
+          >
+            ▶ Next Cue: {{ lessons[next_id - 1].title }}
+          </a>
+          {% else %}
+          <a
+            href="{{ url_for('quiz', question_id=1) }}"
+            class="btn-pink"
+          >
+            Start the Quiz →
+          </a>
+          {% endif %}
+        </div>
       </div>
     </div>
 
-    {% if lesson.quick_tip %}
-    <!-- Quick tip block -->
-    <div class="mb-4">
-      <strong>💡 Quick tip:</strong> {{ lesson.quick_tip }}
-    </div>
-    {% endif %}
-
-    <!-- Modal for Zoom -->
+    <!-- ZOOM MODAL -->
     <div class="modal fade" id="zoomModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content p-3">
@@ -103,6 +408,7 @@
               type="button"
               class="btn-close"
               data-bs-dismiss="modal"
+              aria-label="Close"
             ></button>
           </div>
           <div class="modal-body">
@@ -122,45 +428,12 @@
       </div>
     </div>
 
-    <!-- Bottom navigation -->
-    <div class="d-flex justify-content-between flex-wrap mt-5 gap-2">
-      <div class="d-flex justify-content-center flex-wrap gap-2 mx-auto">
-        <a href="{{ url_for('transition') }}" class="btn btn-outline-secondary">
-          ← Back to Topics
-        </a>
-        <a href="{{ url_for('home') }}" class="btn btn-outline-dark">🏠 Home</a>
-        <a
-          href="{{ url_for('quiz', question_id=1) }}"
-          class="btn btn-outline-success"
-        >
-          🎮 Go to Quiz
-        </a>
-      </div>
-      <div class="d-flex gap-2">
-        {% if prev_id %}
-        <a
-          href="{{ url_for('learn', lesson_id=prev_id) }}"
-          class="btn btn-outline-secondary"
-        >
-          ← Previous: {{ lessons[prev_id - 1].title }}
-        </a>
-        {% endif %} {% if next_id %}
-        <a
-          href="{{ url_for('learn', lesson_id=next_id) }}"
-          class="btn btn-primary"
-        >
-          Next: {{ lessons[next_id - 1].title }} →
-        </a>
-        {% else %}
-        <a href="{{ url_for('quiz', question_id=1) }}" class="btn btn-success">
-          Start the Quiz →
-        </a>
-        {% endif %}
-      </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- BOOTSTRAP + HOTSPOT SCRIPT -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    ></script>
     <script>
+      // Show zoom modal when hotspot is clicked
       document.querySelectorAll(".hotspot").forEach((spot) => {
         spot.addEventListener("click", () => {
           const aiImg = spot.getAttribute("data-zoom-ai");
@@ -169,8 +442,7 @@
 
           document.getElementById("modal-ai").src = aiImg;
           document.getElementById("modal-real").src = realImg;
-          document.getElementById("modal-explanation").textContent =
-            explanation;
+          document.getElementById("modal-explanation").textContent = explanation;
 
           new bootstrap.Modal(document.getElementById("zoomModal")).show();
         });

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Quiz Results</title>
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* -------- GLOBAL BODY / BACKGROUND -------- */
+      body {
+        background-color: #fffaf3; /* Cream background */
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+      a {
+        text-decoration: none;
+      }
+
+      /* -------- NAVBAR -------- */
+      .navbar-custom {
+        background-color: #8f8377; /* Taupe background */
+      }
+      .navbar-custom .navbar-brand,
+      .navbar-custom .nav-link {
+        color: #fff !important;
+        font-weight: 500;
+      }
+      .navbar-custom .nav-link:hover {
+        color: #ffffffcc !important;
+      }
+      .navbar-custom .nav-link.active {
+        color: #ffa94d !important; /* highlight Quiz link */
+      }
+      .logo {
+        width: 45px;
+        height: 45px;
+        margin-right: 8px;
+        border-radius: 50%;
+        background: url("{{ url_for('static', filename='images/icon.png') }}")
+          no-repeat center center / cover;
+      }
+
+      /* -------- PAGE WRAPPER -------- */
+      .page-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1.5rem 2rem;
+      }
+
+      /* -------- SCORE HEADER -------- */
+      .score-header {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #3e3e3e;
+        margin-bottom: 1.5rem;
+      }
+      .score-header span {
+        color: #f3969e; /* Pink accent for the X / Y */
+      }
+
+      /* -------- LIST-GROUP STYLING -------- */
+      .quiz-feedback .list-group-item {
+        border: none; /* remove default borders */
+        background-color: #fff;
+        margin-bottom: 8px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      }
+      .quiz-feedback .list-group-item strong {
+        margin-right: 6px;
+      }
+      .quiz-feedback .list-group-item code {
+        color: #f03e3e;
+        background: #fff0f0;
+        padding: 2px 4px;
+        border-radius: 4px;
+        margin: 0 3px;
+      }
+
+      /* Correct vs. incorrect icons or text, if you’d like them styled further */
+      .correct-text {
+        color: #2f9e44; /* green */
+        font-weight: 600;
+      }
+      .incorrect-text {
+        color: #d9480f; /* orange/red */
+        font-weight: 600;
+      }
+
+      /* Link to lesson (Review: Anatomy & Structure) */
+      .lesson-link {
+        color: #f08c00; /* orange-ish */
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .lesson-link:hover {
+        text-decoration: underline;
+      }
+
+      /* “Back to Home” Button */
+      .btn-home {
+        background-color: #d9c7b8;
+        border: 2px solid #bcae9f;
+        border-radius: 8px;
+        padding: 0.6rem 1rem;
+        color: #333;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .btn-home:hover {
+        background-color: #b39b8a;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-custom navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="{{ url_for('home') }}">
+          <div class="logo"></div>
+          <span>Real or Rendered?</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('transition') }}">Overview</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=1) }}">Anatomy</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=2) }}">Lighting</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=3) }}">Texture</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=4) }}">Symmetry</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=6) }}">Symbolism</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=5) }}">Detail</a>
+            </li>
+            <!-- Quiz is active link -->
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('quiz', question_id=1) }}">Quiz</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- PAGE WRAPPER -->
+    <div class="page-wrapper">
+      <!-- Score Header -->
+      <h2 class="score-header">
+        🎉 Your Score:
+        <span>{{ score }} / {{ feedback|length }}</span>
+      </h2>
+
+      <!-- List of questions with correct/incorrect info -->
+      <div class="list-group quiz-feedback">
+        {% for item in feedback %}
+          <div class="list-group-item d-flex flex-column flex-sm-row justify-content-between align-items-start">
+            <div>
+              <strong>Q{{ item.id }}</strong>:
+              You answered <code>{{ item.selected }}</code> 
+              {% if item.selected == item.correct %}
+                <span class="correct-text">✅ Correct!</span>
+              {% else %}
+                <span class="incorrect-text">❌ Incorrect.</span> 
+                Correct answer: <code>{{ item.correct }}</code>.
+                <br>
+                <a
+                  class="lesson-link"
+                  href="{{ url_for('learn', lesson_id=loop.index) }}"
+                >
+                  Review: {{ item.related }}
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Back to home button -->
+      <div class="mt-4">
+        <a href="{{ url_for('home') }}" class="btn-home">🏠 Back to Home</a>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    ></script>
+  </body>
+</html>
