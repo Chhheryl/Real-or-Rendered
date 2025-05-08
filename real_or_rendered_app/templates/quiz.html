@@ -8,318 +8,13 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <style>
-      /* ---------- GLOBAL (body, fonts, background) ---------- */
-      body {
-        background-color: #fffaf3; /* Cream */
-        margin: 0;
-        font-family: Arial, sans-serif;
-      }
-      a {
-        text-decoration: none;
-      }
-
-      /* ---------- NAVBAR ---------- */
-      .navbar-custom {
-        background-color: #8f8377;
-      }
-      .navbar-custom .navbar-brand,
-      .navbar-custom .nav-link {
-        color: #fff !important;
-        font-weight: 500;
-      }
-      .navbar-custom .nav-link:hover {
-        color: #ffffffcc !important;
-      }
-      .navbar-custom .nav-link.active {
-        color: #ffa94d !important; /* highlight Quiz link */
-      }
-      .logo {
-        width: 45px;
-        height: 45px;
-        margin-right: 8px;
-        border-radius: 50%;
-        background: url("{{ url_for('static', filename='images/icon.png') }}")
-          no-repeat center center / cover;
-      }
-
-      /* ---------- PAGE WRAPPER ---------- */
-      .page-wrapper {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 1.5rem 2rem;
-        position: relative; /* so we can absolutely-position children if we like */
-      }
-
-      /* ---------- QUIZ PROMPT ---------- */
-      .quiz-prompt {
-        text-align: center;
-        margin-bottom: 2rem;
-      }
-      .quiz-prompt h1 {
-        font-size: 1.9rem;
-        font-weight: 700;
-        color: #3e3e3e;
-        margin-bottom: 0.3rem;
-      }
-      .quiz-prompt .question-count {
-        font-size: 1rem;
-        color: #777;
-      }
-
-      /* ---------- CHOICES ROW ---------- */
-      .choices-row {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        flex-wrap: wrap;
-      }
-      .choice-container {
-        position: relative; /* for the radio and image */
-        width: 300px;
-        border-radius: 40px;
-        overflow: hidden; /* corners match the container rounding */
-        text-align: center;
-        border: 10px solid #c7c7c7; /* gray by default */
-        background-color: #fff;
-        transition: background-color 0.3s, border-color 0.3s;
-        cursor: pointer;
-      }
-      /* Chosen (orange) */
-      .choice-container.selected {
-        background-color: #ffe1c2; /* light orange */
-        border-color: #ffa94d; /* darker orange border */
-      }
-      /* Correct (green) */
-      .choice-container.correct {
-        background-color: #d8f5d4;
-        border-color: #69db7c;
-      }
-      /* Incorrect (red) */
-      .choice-container.incorrect {
-        background-color: #ffe3e3;
-        border-color: #ffa8a8;
-      }
-
-      .choice-image {
-        width: 100%;
-        height: 380px; /* ensure same size for images */
-        object-fit: cover;
-      }
-      .choice-radio {
-        position: absolute;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-      .choice-radio input[type="radio"] {
-        accent-color: #777;
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-      }
-      .zoom-text {
-        font-size: 0.85rem;
-        color: #777;
-        cursor: pointer;
-      }
-
-      /* ---------- SUBMIT BUTTON ---------- */
-      .submit-row {
-        text-align: center;
-        margin-top: 2rem;
-      }
-      .btn-submit {
-        background-color: #f8b8bd;
-        border: 2px solid #f2a6ac;
-        border-radius: 8px;
-        padding: 0.6rem 1.2rem;
-        color: #333;
-        font-weight: 600;
-        cursor: pointer;
-      }
-      .btn-submit:hover {
-        background-color: #f3969e;
-        color: #fff;
-      }
-
-      /* ---------- CORRECT BUBBLE (Positioned Outside Image) ---------- */
-      #correctBubble {
-        position: absolute; /* We'll set top/left in JS */
-        max-width: 220px;
-        background-color: #ffe9a3; /* pale yellow/orange */
-        border: 2px solid #ffc966;
-        border-radius: 6px;
-        padding: 0.8rem;
-        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);
-        display: none; /* hidden initially */
-        z-index: 999;
-      }
-      #correctBubble p {
-        margin: 0 0 0.4rem;
-      }
-      #correctBubble button {
-        background-color: #ffa94d;
-        border: none;
-        padding: 0.4rem 0.8rem;
-        color: #fff;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-      /* We’ll attach an arrow on the left side by default. */
-      #correctBubble::before {
-        content: "";
-        position: absolute;
-        top: 20px;
-        left: -20px; /* arrow on left side by default */
-        border-width: 10px;
-        border-style: solid;
-        border-color: transparent #ffe9a3 transparent transparent;
-      }
-      /* If we need an arrow on the right, we can toggle a class .arrow-right */
-      #correctBubble.arrow-right::before {
-        left: auto;
-        right: -20px;
-        border-color: transparent transparent transparent #ffe9a3;
-      }
-
-      /* ---------- HINT BAR (WRONG) ---------- */
-      /* Covers entire page horizontally, fixed in center. */
-      #hintBar {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: #ffe9a3; /* pale yellow */
-        border: 2px solid #ffc966;
-        border-radius: 6px;
-        padding: 1rem 1.5rem;
-        max-width: 800px;
-        width: 90%;
-        text-align: center;
-        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15);
-        display: none; /* hidden until user picks wrong */
-        z-index: 999;
-      }
-      #hintBar p {
-        margin: 0.4rem 0;
-      }
-      #hintBar a {
-        color: #d07913;
-        font-weight: 700;
-        text-decoration: none;
-        margin: 0 0.3rem;
-      }
-      #hintBar button {
-        background-color: #ffa94d;
-        border: none;
-        padding: 0.4rem 0.8rem;
-        color: #fff;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-
-      /* ---------- NEXT QUESTION BUTTON ---------- */
-      .next-row {
-        text-align: center;
-        margin-top: 2rem;
-        display: none; /* shown after “Got It” */
-      }
-      .btn-next {
-        background-color: #ffe98a;
-        border: 2px solid #ffc966;
-        border-radius: 8px;
-        padding: 0.6rem 1.2rem;
-        color: #333;
-        font-weight: 600;
-        cursor: pointer;
-      }
-      .btn-next:hover {
-        background-color: #ffdb65;
-        color: #fff;
-      }
-
-      /* ---------- ZOOM MODAL ---------- */
-      .zoom-modal .modal-content {
-        border-radius: 8px;
-      }
-    </style>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
   </head>
   <body>
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-custom navbar-expand-lg">
-      <div class="container">
-        <a
-          class="navbar-brand d-flex align-items-center"
-          href="{{ url_for('home') }}"
-        >
-          <div class="logo"></div>
-          <span>Real or Rendered?</span>
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-          <ul class="navbar-nav mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('home') }}">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('transition') }}">Overview</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('learn', lesson_id=1) }}"
-                >Anatomy</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('learn', lesson_id=2) }}"
-                >Lighting</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('learn', lesson_id=3) }}"
-                >Texture</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('learn', lesson_id=4) }}"
-                >Symmetry</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('learn', lesson_id=6) }}"
-                >Symbolism</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('learn', lesson_id=5) }}"
-                >Detail</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                class="nav-link active"
-                href="{{ url_for('quiz', question_id=1) }}"
-                >Quiz</a
-              >
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
+    {% include "nav-bar.html" %}
     <!-- MAIN WRAPPER -->
     <div class="page-wrapper">
       <!-- Prompt -->
@@ -337,7 +32,16 @@
           <label
             class="choice-container"
             data-choice="A"
-            {% if question.optionA is not defined %}style="display:none"{% endif %}
+            {%
+            if
+            question.optionA
+            is
+            not
+            defined
+            %}style="display:none"
+            {%
+            endif
+            %}
           >
             <img
               src="{{ url_for('static', filename='images/' + question.optionA) }}"
@@ -358,7 +62,16 @@
           <label
             class="choice-container"
             data-choice="B"
-            {% if question.optionB is not defined %}style="display:none"{% endif %}
+            {%
+            if
+            question.optionB
+            is
+            not
+            defined
+            %}style="display:none"
+            {%
+            endif
+            %}
           >
             <img
               src="{{ url_for('static', filename='images/' + question.optionB) }}"
@@ -377,10 +90,7 @@
 
           <!-- Option C (only if the JSON has it) -->
           {% if question.optionC is defined %}
-          <label
-            class="choice-container"
-            data-choice="C"
-          >
+          <label class="choice-container" data-choice="C">
             <img
               src="{{ url_for('static', filename='images/' + question.optionC) }}"
               alt="Option C"
@@ -422,9 +132,7 @@
 
       <!-- Next Question Button -->
       <div class="next-row" id="nextRow">
-        <button class="btn-next" id="btnNext">
-          Next Question
-        </button>
+        <button class="btn-next" id="btnNext">Next Question</button>
       </div>
     </div>
 
@@ -454,77 +162,84 @@
     </div>
 
     <!-- Bootstrap JS -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
       // 1) Data from question
       const correctAnswer = "{{ question.correct }}";
-      const feedbackCorrect = "{{ question.feedbackCorrect|escape|default('Great job!') }}";
-      const hintWrong = "{{ question.hintWrong|escape|default('Look carefully at the details...') }}";
-      const relatedTopic = "{{ question.related|escape|default('Anatomy & Structure') }}";
+      const feedbackCorrect =
+        "{{ question.feedbackCorrect|escape|default('Great job!') }}";
+      const hintWrong =
+        "{{ question.hintWrong|escape|default('Look carefully at the details...') }}";
+      const relatedTopic =
+        "{{ question.related|escape|default('Anatomy & Structure') }}";
 
       // 2) Radio selection -> highlight container
-      const choiceContainers = document.querySelectorAll('.choice-container');
-      const quizForm = document.getElementById('quizForm');
+      const choiceContainers = document.querySelectorAll(".choice-container");
+      const quizForm = document.getElementById("quizForm");
       choiceContainers.forEach((container) => {
         const radio = container.querySelector('input[type="radio"]');
         if (radio) {
-          radio.addEventListener('change', () => {
-            choiceContainers.forEach((c) => c.classList.remove('selected'));
-            container.classList.add('selected');
+          radio.addEventListener("change", () => {
+            choiceContainers.forEach((c) => c.classList.remove("selected"));
+            container.classList.add("selected");
           });
         }
       });
 
       // Hide bubble/hint at start
-      const correctBubble = document.getElementById('correctBubble');
-      const correctBubbleText = document.getElementById('correctBubbleText');
-      const hintBar = document.getElementById('hintBar');
-      correctBubble.style.display = 'none';
-      hintBar.style.display = 'none';
+      const correctBubble = document.getElementById("correctBubble");
+      const correctBubbleText = document.getElementById("correctBubbleText");
+      const hintBar = document.getElementById("hintBar");
+      correctBubble.style.display = "none";
+      hintBar.style.display = "none";
 
       // 3) On Submit -> check correctness
-      quizForm.addEventListener('submit', function (event) {
+      quizForm.addEventListener("submit", function (event) {
         event.preventDefault();
-        const selectedRadio = document.querySelector('input[name="choice"]:checked');
+        const selectedRadio = document.querySelector(
+          'input[name="choice"]:checked'
+        );
         if (!selectedRadio) return;
 
         const chosenValue = selectedRadio.value;
-        const chosenContainer = document.querySelector('.choice-container[data-choice="' + chosenValue + '"]');
+        const chosenContainer = document.querySelector(
+          '.choice-container[data-choice="' + chosenValue + '"]'
+        );
 
         // reset states
         choiceContainers.forEach((c) => {
-          c.classList.remove('correct', 'incorrect');
+          c.classList.remove("correct", "incorrect");
         });
-        correctBubble.style.display = 'none';
-        hintBar.style.display = 'none';
+        correctBubble.style.display = "none";
+        hintBar.style.display = "none";
 
         // Mark correct container in green
-        const correctContainer = document.querySelector('.choice-container[data-choice="' + correctAnswer + '"]');
+        const correctContainer = document.querySelector(
+          '.choice-container[data-choice="' + correctAnswer + '"]'
+        );
         if (correctContainer) {
-          correctContainer.classList.add('correct');
+          correctContainer.classList.add("correct");
         }
 
         if (chosenValue === correctAnswer) {
           // Hide orange selection
-          chosenContainer.classList.remove('selected');
+          chosenContainer.classList.remove("selected");
 
           // Show correct bubble outside the image
           positionCorrectBubble(chosenContainer); // see function below
           correctBubbleText.innerText = feedbackCorrect;
-          correctBubble.style.display = 'block';
+          correctBubble.style.display = "block";
         } else {
           // Mark chosen as incorrect
-          chosenContainer.classList.remove('selected');
-          chosenContainer.classList.add('incorrect');
+          chosenContainer.classList.remove("selected");
+          chosenContainer.classList.add("incorrect");
 
           // Show hint bar
-          document.getElementById('hintText').innerText = hintWrong;
-          document.getElementById('hintLink').innerText = relatedTopic;
-          document.getElementById('hintLink').href =
+          document.getElementById("hintText").innerText = hintWrong;
+          document.getElementById("hintLink").innerText = relatedTopic;
+          document.getElementById("hintLink").href =
             "{{ url_for('learn', lesson_id=1) }}"; // or dynamic map
-          hintBar.style.display = 'block';
+          hintBar.style.display = "block";
         }
       });
 
@@ -547,43 +262,48 @@
 
         if (containerCenter < pageMid) {
           // Container is on left side => bubble on the right
-          correctBubble.classList.remove('arrow-right');
+          correctBubble.classList.remove("arrow-right");
           // place bubble to the right of container
           leftPos = rect.right + window.scrollX + 10;
         } else {
           // Container is on right side => bubble on the left
-          correctBubble.classList.add('arrow-right');
+          correctBubble.classList.add("arrow-right");
           leftPos = rect.left + window.scrollX - bubbleRect.width - 10;
         }
 
-        correctBubble.style.top = topPos + 'px';
-        correctBubble.style.left = leftPos + 'px';
+        correctBubble.style.top = topPos + "px";
+        correctBubble.style.left = leftPos + "px";
       }
 
       // 5) “Got it” => hide bubble/hint, show Next
-      document.getElementById('btnBubbleGotIt').addEventListener('click', () => {
-        correctBubble.style.display = 'none';
-        document.getElementById('nextRow').style.display = 'block';
-      });
-      document.getElementById('btnHintGotIt').addEventListener('click', () => {
-        hintBar.style.display = 'none';
-        document.getElementById('nextRow').style.display = 'block';
+      document
+        .getElementById("btnBubbleGotIt")
+        .addEventListener("click", () => {
+          correctBubble.style.display = "none";
+          document.getElementById("nextRow").style.display = "block";
+        });
+      document.getElementById("btnHintGotIt").addEventListener("click", () => {
+        hintBar.style.display = "none";
+        document.getElementById("nextRow").style.display = "block";
       });
 
       // 6) Next question
-      document.getElementById('btnNext').addEventListener('click', () => {
+      document.getElementById("btnNext").addEventListener("click", () => {
         const currentQ = parseInt("{{ question.id }}");
         const nextQ = currentQ + 1;
-        window.location.href = "{{ url_for('quiz', question_id=1) }}".replace("1", nextQ);
+        window.location.href = "{{ url_for('quiz', question_id=1) }}".replace(
+          "1",
+          nextQ
+        );
       });
 
       // 7) Zoom in
-      document.querySelectorAll('.zoom-text').forEach((z) => {
-        z.addEventListener('click', (e) => {
+      document.querySelectorAll(".zoom-text").forEach((z) => {
+        z.addEventListener("click", (e) => {
           e.preventDefault();
-          const imgSrc = z.getAttribute('data-img');
-          document.getElementById('zoomModalImg').src = imgSrc;
-          new bootstrap.Modal(document.getElementById('zoomModal')).show();
+          const imgSrc = z.getAttribute("data-img");
+          document.getElementById("zoomModalImg").src = imgSrc;
+          new bootstrap.Modal(document.getElementById("zoomModal")).show();
         });
       });
     </script>
