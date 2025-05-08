@@ -8,217 +8,14 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <style>
-      /* ------------------------------------------ */
-      /* GLOBAL STYLES */
-      /* ------------------------------------------ */
-      body {
-        background-color: #fffaf3; /* Light cream background */
-        margin: 0;
-        font-family: Arial, sans-serif;
-      }
-
-      /* ------------------------------------------ */
-      /* NAVBAR STYLES */
-      /* ------------------------------------------ */
-      .top-nav {
-        background-color: #9c8b7f; /* Taupe/brown from the screenshot */
-      }
-      /* Brand text + links in the navbar */
-      .top-nav .navbar-brand,
-      .top-nav .nav-link {
-        color: #fff !important;
-        font-weight: 500;
-      }
-      /* "Home" is highlighted in orange */
-      .top-nav .nav-link.active {
-        color: #fca242 !important; /* Bright orange for active link */
-      }
-      .top-nav .nav-link:hover {
-        color: #ffffffb3 !important; /* Slightly lighter on hover */
-      }
-
-      /* Optional brand logo (the small circle to the left of brand text) */
-      .logo {
-        width: 45px;
-        height: 45px;
-        margin-right: 8px;
-        border-radius: 50%;
-        background: url("{{ url_for('static', filename='images/icon.png') }}")
-          no-repeat center center / cover;
-      }
-
-      /* ------------------------------------------ */
-      /* HERO SECTION STYLES */
-      /* ------------------------------------------ */
-      .hero-section {
-        text-align: center;
-        padding: 60px 20px 80px; /* Extra bottom space so the buttons appear well-centered */
-      }
-
-      /* Large icon above the heading */
-      .hero-icon {
-        width: 150px;
-        height: 150px;
-        display: block;
-        margin: 0 auto 20px; /* centers icon & adds spacing below */
-        background: url("{{ url_for('static', filename='images/icon.png') }}")
-          no-repeat center center / cover;
-      }
-
-      /* “Welcome to Real or Rendered?” heading */
-      .hero-title {
-        font-size: 3rem; /* ~48px if root font is 16px */
-        font-weight: 700;
-        color: #4c4c4c;
-        margin-bottom: 0.5rem;
-      }
-
-      /* Smaller subtitle text */
-      .hero-subtitle {
-        font-size: 1rem;
-        color: #777;
-        margin-bottom: 2.5rem;
-      }
-
-      /* ------------------------------------------ */
-      /* BUTTON STYLES (Pink & Tan) */
-      /* ------------------------------------------ */
-      .hero-buttons {
-        display: inline-flex;
-        flex-direction: column; /* stack them vertically */
-        align-items: center;    /* center them horizontally */
-        gap: 1.2rem;           /* space between the two buttons */
-      }
-
-      .btn-pink,
-      .btn-tan {
-        display: inline-block;
-        font-weight: 600;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-      }
-
-      /* Pink button (Start Learning) */
-      .btn-pink {
-        background-color: #f8b8bd;
-        color: #333;
-        font-size: 1.1rem;
-        padding: 0.75rem 2rem; /* wide, tall button */
-      }
-      .btn-pink:hover {
-        background-color: #f3969e;
-        color: #fff;
-      }
-
-      /* Tan button (Take the Quiz) */
-      .btn-tan {
-        background-color: #d9c7b8;
-        color: #333;
-        font-size: 1rem;
-        padding: 0.6rem 1.5rem;
-      }
-      .btn-tan:hover {
-        background-color: #b39b8a;
-        color: #fff;
-      }
-    </style>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
   </head>
 
   <body>
-    <!-- NAVBAR -->
-    <nav class="navbar top-nav navbar-expand-lg">
-      <div class="container">
-        <!-- Brand + Optional Logo -->
-        <a class="navbar-brand d-flex align-items-center" href="{{ url_for('home') }}">
-          <div class="logo"></div>
-          <span>Real or Rendered?</span>
-        </a>
-        <!-- Mobile toggler -->
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Nav links on the right -->
-        <div
-          class="collapse navbar-collapse justify-content-end"
-          id="navbarSupportedContent"
-        >
-          <ul class="navbar-nav mb-2 mb-lg-0">
-            <!-- Home -->
-            <li class="nav-item">
-              <a
-                class="nav-link active"
-                href="{{ url_for('home') }}"
-                >Home</a
-              >
-            </li>
-            <!-- Overview -->
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('transition') }}">Overview</a>
-            </li>
-            <!-- Anatomy (lesson 1) -->
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="{{ url_for('learn', lesson_id=1) }}"
-                >Anatomy</a
-              >
-            </li>
-            <!-- Lighting (lesson 2) -->
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="{{ url_for('learn', lesson_id=2) }}"
-                >Lighting</a
-              >
-            </li>
-            <!-- Texture (lesson 3) -->
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="{{ url_for('learn', lesson_id=3) }}"
-                >Texture</a
-              >
-            </li>
-            <!-- Symmetry (lesson 4) -->
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="{{ url_for('learn', lesson_id=4) }}"
-                >Symmetry</a
-              >
-            </li>
-            <!-- Symbolism (lesson 6) -->
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="{{ url_for('learn', lesson_id=6) }}"
-                >Symbolism</a
-              >
-            </li>
-            <!-- Quiz -->
-            <li class="nav-item">
-              <a
-                class="nav-link"
-                href="{{ url_for('quiz', question_id=1) }}"
-                >Quiz</a
-              >
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
+    {% include "nav-bar.html" %}
     <!-- HERO SECTION -->
     <section class="hero-section">
       <!-- Big circular icon above the title -->
@@ -232,7 +29,7 @@
 
       <!-- Vertically stacked buttons -->
       <div class="hero-buttons">
-        <a href="{{ url_for('transition') }}" class="btn-pink">
+        <a href="{{ url_for('transition') }}" class="btn-pink-home">
           Start Learning
         </a>
         <a href="{{ url_for('quiz', question_id=1) }}" class="btn-tan">
@@ -242,8 +39,6 @@
     </section>
 
     <!-- Bootstrap JS for navbar toggler -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
