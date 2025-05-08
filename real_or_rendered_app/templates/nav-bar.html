@@ -1,0 +1,102 @@
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar top-nav navbar-expand-lg">
+    <div class="container">
+      <!-- Brand + Optional Logo -->
+      <a
+        class="navbar-brand d-flex align-items-center {% if active_page == 'home' %}active{% endif %}"
+        href="{{ url_for('home') }}"
+      >
+        <div class="logo"></div>
+        <span>Real or Rendered?</span>
+      </a>
+
+      <!-- Mobile toggler -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Nav links on the right -->
+      <div
+        class="collapse navbar-collapse justify-content-end"
+        id="navbarSupportedContent"
+      >
+        <ul class="navbar-nav mb-2 mb-lg-0">
+          <!-- Home -->
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.endpoint == 'home' %}active{% endif %}"
+              href="{{ url_for('home') }}"
+              >Home</a
+            >
+          </li>
+          <!-- Overview -->
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.endpoint == 'transition' %}active{% endif %}"
+              href="{{ url_for('transition') }}"
+              >Overview</a
+            >
+          </li>
+          <!-- Anatomy (lesson 1) -->
+          <li class="nav-item">
+            <a
+              class="nav-link {% if lesson and lesson.id == 1 %}active{% endif %}"
+              href="{{ url_for('learn', lesson_id=1) }}"
+              >Anatomy</a
+            >
+          </li>
+          <!-- Lighting (lesson 2) -->
+          <li class="nav-item">
+            <a
+              class="nav-link {% if lesson and lesson.id == 2 %}active{% endif %}"
+              href="{{ url_for('learn', lesson_id=2) }}"
+              >Lighting</a
+            >
+          </li>
+          <!-- Texture (lesson 3) -->
+          <li class="nav-item">
+            <a
+              class="nav-link {% if lesson and lesson.id == 3 %}active{% endif %}"
+              href="{{ url_for('learn', lesson_id=3) }}"
+              >Texture</a
+            >
+          </li>
+          <!-- Symmetry (lesson 4) -->
+          <li class="nav-item">
+            <a
+              class="nav-link {% if lesson and lesson.id == 4 %}active{% endif %}"
+              href="{{ url_for('learn', lesson_id=4) }}"
+              >Symmetry</a
+            >
+          </li>
+
+          <!-- Symbolism (lesson 5) -->
+          <li class="nav-item">
+            <a
+              class="nav-link {% if lesson and lesson.id == 6 %}active{% endif %}"
+              href="{{ url_for('learn', lesson_id=5) }}"
+              >Symbolism</a
+            >
+          </li>
+          <!-- Quiz -->
+          <li class="nav-item">
+            <a
+              class="nav-link {% if request.endpoint == 'quiz' %}active{% endif %}"
+              href="{{ url_for('quiz', question_id=1) }}"
+              >Quiz</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</body>
