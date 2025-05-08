@@ -34,7 +34,10 @@
           </a>
           {% else %}
           <!-- If this is the last lesson, go to transition_learn_quiz -->
-          <a href="{{ url_for('transition_learn_quiz') }}" class="btn-pink">
+          <a
+            href="{{ url_for('transition_learn_quiz') }}"
+            class="btn-pink-nav mb-2"
+          >
             Next →
           </a>
           {% endif %}

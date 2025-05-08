@@ -14,6 +14,7 @@
     />
   </head>
   <body>
+    {% include "nav-bar.html" %}
     <!-- MAIN WRAPPER -->
     <div class="page-wrapper">
       <div class="transition-content">
@@ -28,13 +29,13 @@
         </p>
 
         <!-- Button to Quiz -->
-        <a href="{{ url_for('quiz', question_id=1) }}" class="btn-pink">
+        <a href="{{ url_for('quiz', question_id=1) }}" class="btn-pink-nav">
           Start the Quiz
         </a>
         <br />
 
         <!-- Back to Symbolism & Intent -->
-        <a href="{{ url_for('learn', lesson_id=6) }}" class="back-link">
+        <a href="{{ url_for('learn', lesson_id=5) }}" class="back-link">
           Back to Symbolism &amp; Intent
         </a>
       </div>
