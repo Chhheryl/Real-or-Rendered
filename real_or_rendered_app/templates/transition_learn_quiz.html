@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Learn to Quiz Transition</title>
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #fffaf3; /* Cream background */
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+      a {
+        text-decoration: none;
+      }
+      /* NAVBAR (same as your existing pages) */
+      .navbar-custom {
+        background-color: #8f8377; /* Taupe */
+      }
+      .navbar-custom .navbar-brand,
+      .navbar-custom .nav-link {
+        color: #fff !important;
+        font-weight: 500;
+      }
+      .navbar-custom .nav-link:hover {
+        color: #ffffffcc !important;
+      }
+      .navbar-custom .nav-link.active {
+        color: #ffd600 !important;
+      }
+      .logo {
+        width: 45px;
+        height: 45px;
+        margin-right: 8px;
+        border-radius: 50%;
+        background: url("{{ url_for('static', filename='images/icon.png') }}")
+          no-repeat center center / cover;
+      }
+
+      /* PAGE WRAPPER */
+      .page-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1.5rem 2rem;
+      }
+
+      /* MAIN CONTENT */
+      .transition-content {
+        text-align: center;
+        margin-top: 4rem;
+      }
+      .transition-content h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #3e3e3e;
+      }
+      .transition-content p {
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 2rem;
+      }
+
+      /* Pink button (matching your existing style) */
+      .btn-pink {
+        background-color: #f8b8bd;
+        border: 2px solid #f2a6ac;
+        border-radius: 8px;
+        padding: 0.6rem 1.2rem;
+        color: #333;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        margin-bottom: 1rem;
+      }
+      .btn-pink:hover {
+        background-color: #f3969e;
+        color: #fff;
+      }
+
+      /* Back link style */
+      .back-link {
+        color: #d07913;
+        text-decoration: underline;
+        font-weight: 600;
+      }
+      .back-link:hover {
+        color: #b56407;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-custom navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="{{ url_for('home') }}">
+          <div class="logo"></div>
+          <span>Real or Rendered?</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('transition') }}">Overview</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=1) }}">Anatomy</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=2) }}">Lighting</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=3) }}">Texture</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=4) }}">Symmetry</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lesson_id=6) }}">Symbolism</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('quiz', question_id=1) }}">Quiz</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- MAIN WRAPPER -->
+    <div class="page-wrapper">
+      <div class="transition-content">
+        <!-- Large header -->
+        <h1>
+          You’ve completed: 5/5 Clues Unlocked!
+          <span style="font-size:1.4rem;">🎉</span>
+        </h1>
+        <p>
+          Now it’s time to apply what you learned <br />
+          to pick out the actual human-created artwork!
+        </p>
+
+        <!-- Button to Quiz -->
+        <a href="{{ url_for('quiz', question_id=1) }}" class="btn-pink">
+          Start the Quiz
+        </a>
+        <br />
+
+        <!-- Back to Symbolism & Intent -->
+        <a
+          href="{{ url_for('learn', lesson_id=6) }}"
+          class="back-link"
+        >
+          Back to Symbolism &amp; Intent
+        </a>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS (if needed for collapsible nav) -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    ></script>
+  </body>
+</html>

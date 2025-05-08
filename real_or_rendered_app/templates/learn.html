@@ -403,19 +403,21 @@
         </div>
         <div class="nav-right">
           {% if next_id %}
-          <a
-            href="{{ url_for('learn', lesson_id=next_id) }}"
-            class="btn-pink"
-          >
-            ▶ Next Cue: {{ lessons[next_id - 1].title }}
-          </a>
+            <!-- If there's a next lesson, link to it -->
+            <a
+              href="{{ url_for('learn', lesson_id=next_id) }}"
+              class="btn-pink"
+            >
+              ▶ Next Cue: {{ lessons[next_id - 1].title }}
+            </a>
           {% else %}
-          <a
-            href="{{ url_for('quiz', question_id=1) }}"
-            class="btn-pink"
-          >
-            Start the Quiz →
-          </a>
+            <!-- If this is the last lesson, go to transition_learn_quiz -->
+            <a
+              href="{{ url_for('transition_learn_quiz') }}"
+              class="btn-pink"
+            >
+              Next →
+            </a>
           {% endif %}
         </div>
       </div>

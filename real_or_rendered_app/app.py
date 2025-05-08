@@ -69,6 +69,10 @@ def learn(lesson_id):
         unlocked=len(completed)
     )
 
+@app.route('/transition_learn_quiz')
+def transition_learn_quiz():
+    return render_template('transition_learn_quiz.html')
+
 
 @app.route('/quiz/<int:question_id>', methods=['GET', 'POST'])
 def quiz(question_id):
