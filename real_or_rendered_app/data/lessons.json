@@ -1,6 +1,7 @@
 [
   {
     "id": 1,
+    "logo_pic":"anatomy_logo.jpg",
     "title": "Anatomy & Structure",
     "tip": "Note the consistent structure in hands, face, and proportions.",
     "captions": {
@@ -43,6 +44,7 @@
   },
   {
     "id": 2,
+    "logo_pic":"lighting_logo.jpg",
     "title": "Lighting & Shadows",
     "tip": "Do the shadows make sense based on the light source?",
     "images": {
@@ -66,6 +68,7 @@
   },
   {
     "id": 3,
+    "logo_pic":"texture_logo.jpg",
     "title": "Textures & Surfaces",
     "tip": "Watch for overly smooth or plastic-like textures.",
     "images": {
@@ -90,6 +93,7 @@
   },
   {
     "id": 4,
+    "logo_pic":"symmetry_logo.jpg",
     "title": "Symmetry & Composition",
     "tip": "Perfect symmetry may be a red flag.",
     "images": {
@@ -112,6 +116,7 @@
   },
   {
     "id": 5,
+    "logo_pic":"symbolism_logo.jpg",
     "title": "Symbolism & Intent",
     "tip": "AI models sometimes conflate styles across eras",
     "images": {

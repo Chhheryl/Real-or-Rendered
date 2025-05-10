@@ -49,6 +49,14 @@
           href="{{ url_for('learn', lesson_id=lesson.id) }}"
           class="tile tile-hover"
         >
+          <!-- Logo image -->
+          <div class="tile-logo">
+            <img
+              src="{{ url_for('static', filename='images/' + lesson.logo_pic) }}"
+              alt="logo for {{ lesson.title }}"
+            />
+          </div>
+
           <div class="tile-text">
             <h5>{{ lesson.title }}</h5>
             <p>{{ lesson.tip }}</p>

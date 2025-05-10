@@ -153,29 +153,43 @@ PAGE WRAPPER
   grid-template-columns: repeat(3, 1fr); /* 3 columns */
   gap: 1.5rem;
   justify-items: center;
-  align-items: start;
+  align-items: stretch;
 }
 .tile {
   display: flex;
   align-items: center;
-  border-radius: 8px;
+  border-radius: 16px;
   text-decoration: none;
   color: #333;
   width: 100%;
   max-width: 320px;
   min-height: 100px;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
+  gap: 1rem;
   transition: 0.3s;
 }
+
 /* Base tile style: tan */
 .tile-hover {
-  background-color: #d9c7b8; /* Tan */
+  background-color: #e3d2c6ff; /* Tan */
+  height: 130px;
   color: #333;
   text-decoration: none;
   border-radius: 16px;
-  padding: 1.5rem;
+  padding: 0.5rem 0.2rem;
   transition: background-color 0.3s ease;
-  display: block;
+  display: flex; /* ✅ switch from block to flex */
+  align-items: center; /* ✅ vertically align logo with text */
+  gap: 0.5rem; /* ✅ spacing between logo and text */
+}
+
+/* Logo image */
+.tile-logo img {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: contain;
+  margin-left: 0.1rem;
 }
 
 /* Hover state: pink */
@@ -204,15 +218,22 @@ PAGE WRAPPER
   background-repeat: no-repeat;
   border-radius: 4px;
 }
+.tile-text {
+  flex:1;
+  max-width: 260px;
+  line-height:1.3;
+}
 .tile-text h5 {
   margin: 0 0 0.3rem;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 700;
+  color: #555;
 }
 .tile-text p {
   margin: 0;
   font-size: 0.85rem;
-  color: #555;
+  font-weight: 400;
+  color: #777;
 }
 
 /* Example responsive stacking (optional) */
