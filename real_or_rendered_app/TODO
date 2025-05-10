@@ -1,3 +1,4 @@
 1. overview - add the topic logo to each cardboard
 2. quiz - formatting issues; add the bonus question; add a previous question button
 3. feedback page - show the scores and allow users to go back to the home page
+4. move all the javascript code into separate files
