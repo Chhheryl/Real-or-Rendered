@@ -135,8 +135,7 @@
       "zoom_ai": "ai_zoom_symbolism(1).jpg",
       "zoom_real": "real_symbolism(1).jpg",
       "explanation": "The central figure, depicted as a medieval knight, is wearing Art-Deco-style earrings — a fashion trend from the 1920s–30s. "
-  },
-  {
+  },{
     "id": 2,
     "label": "Incoherent Cultural Symbolism",
     "x_pct": 80,

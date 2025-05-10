@@ -14,9 +14,9 @@
   {
     "id": 2,
     "question": "Which one is more likely to be human-made? ",
-    "optionA": "texture_ai_quiz.jpg",
-    "optionB": "texture_real_quiz.jpg",
-    "correct": "B",
+    "optionA": "texture_real_quiz.jpg",
+    "optionB": "texture_ai_quiz.jpg",
+    "correct": "A",
     "related": "Texture & Surface",
     "topic_id": 3,
     "feedbackCorrect": "Nice work. The painterly texture has varied brushstrokes and subtle imperfections.",
@@ -26,9 +26,9 @@
   {
     "id": 3,
     "question": "Which one is more likely to be human-made? ",
-    "optionA": "light_ai_quiz.png",
-    "optionB": "light_real_quiz.png",
-    "correct": "B",
+    "optionA": "light_real_quiz.png",
+    "optionB": "light_ai_quiz.png",
+    "correct": "A",
     "related": "Shadows & Light",
     "topic_id": 2,
     "feedbackCorrect": "Correct. The lighting angles are consistent and physically plausible in the real painting.",
@@ -51,14 +51,14 @@
   {
     "id": 5,
     "question": "Bonus: Which one is more likely to be human-made? ",
-    "optionA": "symbolism_ai_quiz.jpg",
-    "optionB": "symbolism_human_quiz.jpg",
-    "optionC": "symbolism_ai_2_quiz.jpg",
+    "optionA": "bonus_A.jpg",
+    "optionB": "bonus-B.jpg",
+    "optionC": "bonus-C.jpg",
     "correct": "C",
     "related": "Symbolism & Intent",
     "topic_id": 5,
     "feedbackCorrect": "You are correct! Niceee :)))))",
     "feedbackWrong": "Hmmm, do you think the presence of these two people in a same pic makes sense",
-    "hintWrong": "When Einstein and Tesla take a selfie in front of the Eiffel Tower... and when Steve Jobs time-traveled just to watch Elon Musk accidentally open the front camera. Pretty impressive"
+    "hintWrong": "When Einstein and Tesla take a selfie in front of the Eiffel Tower... and when Steve Jobs time traveled just to watch Elon Musk accidentally open the front camera. Pretty impressive :)))"
   }
 ]

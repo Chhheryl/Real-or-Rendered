@@ -118,7 +118,12 @@
     </div>
 
     <!-- ZOOM MODAL -->
-    <div class="modal fade" id="zoomModal" tabindex="-1" aria-hidden="true">
+    <div
+      class="modal fade zoom-modal"
+      id="zoomModal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div>
           <div class="modal-header">
@@ -128,7 +133,6 @@
               class="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
-              id="btnClosePanel"
             ></button>
           </div>
           <div class="modal-body">
@@ -151,16 +155,10 @@
     <!-- BOOTSTRAP + HOTSPOT SCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      const btnClosePanel = document.getElementById("btnClosePanel");
-      if (btnClosePanel) {
-        btnClosePanel.addEventListener("click", () => {
-          console.log("Modal manually closed via button");
-        });
-      }
-
       // On hotspot click
       document.querySelectorAll(".hotspot").forEach((spot) => {
-        spot.addEventListener("click", () => {
+        spot.addEventListener("click", (e) => {
+          e.preventDefault();
           // Populate modal content
           const label = spot.getAttribute("data-label");
           const aiImg = spot.getAttribute("data-zoom-ai");

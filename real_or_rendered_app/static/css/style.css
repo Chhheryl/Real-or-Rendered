@@ -75,7 +75,7 @@ PAGE WRAPPER
 .page-wrapper {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1.5rem 2rem;
+  padding: 1.5rem 1rem;
   height: calc(100vh - 70px);
   overflow-x: hidden; /* Prevent horizontal scroll */
   overflow-y: auto;   /* Scroll only if needed */
@@ -674,12 +674,16 @@ PAGE WRAPPER
 .choices-row {
   display: flex;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 2rem;
   flex-wrap: wrap;
+  align-items: flex-start;
+  max-width: 1000px;  /* Ensure wrapping doesn't trigger too early */
+  margin: 0 auto;
 }
 .choice-container {
   position: relative; /* for the radio and image */
-  width: 300px;
+  max-width: 280px;
+  flex: 0 1 280px;
   border-radius: 40px;
   overflow: hidden; /* corners match the container rounding */
   text-align: center;
@@ -687,6 +691,10 @@ PAGE WRAPPER
   background-color: #fff;
   transition: background-color 0.3s, border-color 0.3s;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 1rem;
 }
 /* Chosen (orange) */
 .choice-container.selected {
@@ -733,7 +741,7 @@ PAGE WRAPPER
 .submit-row {
   position: relative;
   text-align: center;
-  margin-top: -3.5rem;
+  margin-top: 1rem;
 }
 .btn-submit {
   background-color: #f8b8bd;
@@ -829,7 +837,7 @@ PAGE WRAPPER
 
 .next-row {
   position: absolute;
-  margin-top: -3rem;
+  margin-top: 1rem;
   left:50%;
   transform: translateX(-50%);
   display: none;
@@ -852,6 +860,7 @@ PAGE WRAPPER
 /* ---------- ZOOM MODAL ---------- */
 .zoom-modal .modal-content {
   border-radius: 8px;
+  border: none;
 }
 
 .image-container {
