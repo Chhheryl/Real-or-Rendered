@@ -30,25 +30,10 @@
         </div>
 
         <div class="nav-right d-flex flex-column align-items-end">
-          {% if next_id %}
-          <a
-            href="{{ url_for('learn', lesson_id=next_id) }}"
-            class="btn-pink-nav mb-2"
-          >
-            ▶ Next Cue: {{ lessons[next_id - 1].title }}
-          </a>
-          {% else %}
-          <!-- If this is the last lesson, go to transition_learn_quiz -->
-          <a
-            href="{{ url_for('transition_learn_quiz') }}"
-            class="btn-pink-nav mb-2"
-          >
-            Next →
-          </a>
-          {% endif %}
-
           <div class="unlocked-info">
-            🔓 You’ve unlocked: {{ lesson.id }}/5 cues
+            🔓 You’ve unlocked:
+            <span class="highlight-tan">{{ lesson.id }}</span> out of
+            <span class="highlight-tan">5</span> cues
           </div>
         </div>
       </div>
@@ -110,6 +95,24 @@
           <a href="{{ url_for('transition') }}" class="btn-tan-nav"
             >Back to 📖Overview</a
           >
+        </div>
+        <div class="nav-right">
+          {% if next_id %}
+          <a
+            href="{{ url_for('learn', lesson_id=next_id) }}"
+            class="btn-pink-nav mb-2"
+          >
+            ▶ Next Cue: {{ lessons[next_id - 1].title }}
+          </a>
+          {% else %}
+          <!-- If this is the last lesson, go to transition_learn_quiz -->
+          <a
+            href="{{ url_for('transition_learn_quiz') }}"
+            class="btn-pink-nav mb-2"
+          >
+            Next →
+          </a>
+          {% endif %}
         </div>
       </div>
     </div>

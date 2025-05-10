@@ -14,6 +14,11 @@ h1, h2, .modal-title, title {
   font-family: 'Lora', serif;
   font-weight:700;
 }
+
+.highlight-tan {
+  color: #333;
+  font-weight: 700; 
+}
 /* ------------------------------------------ */
 /* NAVBAR STYLES */
 /* ------------------------------------------ */
@@ -26,12 +31,13 @@ h1, h2, .modal-title, title {
 .top-nav .navbar-brand,
 .top-nav .nav-link {
   color: #fff !important;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 /* Highlight active nav link */
 .top-nav .nav-link.active {
   color: #fca242 !important;
+  font-weight: 700;
 }
 
 /* Highlight active brand title */
@@ -88,8 +94,8 @@ PAGE WRAPPER
 
 .back-link {
   display: inline-block;
-  color: #007bff;
-  font-weight: 500;
+  color: #fca242;
+  font-weight: 700;
   text-decoration: underline;
 }
 /* ------------------------------------------ */
