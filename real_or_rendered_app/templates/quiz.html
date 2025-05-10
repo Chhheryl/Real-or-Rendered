@@ -53,11 +53,13 @@
             />
             <div class="choice-radio">
               <input type="radio" name="choice" value="A" required />
-              <span
-                class="zoom-text"
-                data-img="{{ url_for('static', filename='images/' + question.optionA) }}"
-                >Zoom in</span
-              >
+            </div>
+            <div style="margin: 2rem"></div>
+            <div
+              class="zoom-text"
+              data-img="{{ url_for('static', filename='images/' + question.optionA) }}"
+            >
+              🔍 Zoom in
             </div>
           </label>
 
@@ -83,13 +85,15 @@
             />
             <div class="choice-radio">
               <input type="radio" name="choice" value="B" required />
-              <span
+            </div>
+            <div style="margin: 2rem"></div>
+            <div
                 class="zoom-text"
                 data-img="{{ url_for('static', filename='images/' + question.optionB) }}"
-                >Zoom in</span
-              >
+                >🔍Zoom in
             </div>
-          </label>
+            
+          </div>
 
           <!-- Option C (only if the JSON has it) -->
           {% if question.optionC is defined %}
@@ -101,12 +105,13 @@
             />
             <div class="choice-radio">
               <input type="radio" name="choice" value="C" required />
-              <span
+            </div>
+            <div style="margin: 2rem"></div>
+            <div
                 class="zoom-text"
                 data-img="{{ url_for('static', filename='images/' + question.optionC) }}"
-                >Zoom in</span
+                >Zoom in</div
               >
-            </div>
           </label>
           {% endif %}
         </div>

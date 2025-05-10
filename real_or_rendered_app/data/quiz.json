@@ -43,5 +43,17 @@
     "feedbackCorrect": "Look at the deeper narrative and accurate detail—this suggests genuine intent and historical context.",
     "feedbackWrong": "The other images have random futuristic elements or inconsistent details, typical of AI attempts at symbolic art.",
     "hintWrong": "Hint: do you notice a cohesive story or correct historical detail in the piece you chose?"
+  },
+  {
+    "id": 5,
+    "question": "Bonus: Which one is more likely to be human-made? ",
+    "optionA": "symbolism_ai_quiz.jpg",
+    "optionB": "symbolism_human_quiz.jpg",
+    "optionC": "symbolism_ai_2_quiz.jpg",
+    "correct": "C",
+    "related": "Symbolism & Intent",
+    "feedbackCorrect": "You are correct! Niceee :)))))",
+    "feedbackWrong": "Hmmm, do you think the presence of these two people in a same pic makes sense",
+    "hintWrong": "Hint: When Einstein and Tesla take a selfie in front of the Eiffel Tower... and when Steve Jobs time-traveled just to watch Elon Musk accidentally open the front camera. Pretty impressive"
   }
 ]

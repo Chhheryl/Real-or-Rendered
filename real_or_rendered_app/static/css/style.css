@@ -648,7 +648,7 @@ PAGE WRAPPER
 .choices-row {
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 .choice-container {
@@ -685,12 +685,11 @@ PAGE WRAPPER
 }
 .choice-radio {
   position: absolute;
-  bottom: 10px;
+  bottom: 2rem;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 6px;
 }
 .choice-radio input[type="radio"] {
   accent-color: #777;
@@ -706,8 +705,9 @@ PAGE WRAPPER
 
 /* ---------- SUBMIT BUTTON ---------- */
 .submit-row {
+  margin-top: -4rem;
+  margin-bottom: 0;
   text-align: center;
-  margin-top: 2rem;
 }
 .btn-submit {
   background-color: #f8b8bd;
@@ -802,7 +802,7 @@ PAGE WRAPPER
 /* ---------- NEXT QUESTION BUTTON ---------- */
 .next-row {
   text-align: center;
-  margin-top: 2rem;
+  margin-top: 0.5rem;
   display: none; /* shown after “Got It” */
 }
 .btn-next {
