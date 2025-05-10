@@ -4,7 +4,14 @@
 body {
   background-color: #fffaf3; /* Light cream background */
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Lora', sans-serif;
+  font-weight:400;
+}
+
+
+h1, h2, .modal-title {
+  font-family: 'Lora', serif;
+  font-weight:700;
 }
 /* ------------------------------------------ */
 /* NAVBAR STYLES */
@@ -53,6 +60,33 @@ PAGE WRAPPER
   padding: 1.5rem 2rem;
 }
 
+.page-wrapper-transition {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* take full viewport height */
+  padding: 2rem;
+  text-align: center;
+  background-color: #fffaf3;
+}
+
+.transition-content h1 {
+  font-family: 'Lora', serif;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.transition-content p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.back-link {
+  display: inline-block;
+  color: #007bff;
+  font-weight: 500;
+  text-decoration: underline;
+}
 /* ------------------------------------------ */
 /* OVERVIEW SECTION STYLES */
 /* --------------- TOP INFO NOTE & BIG ORANGE BOX --------------- */
@@ -358,9 +392,10 @@ PAGE WRAPPER
   border-radius: 8px;
   padding: 0.6rem 1.2rem;
   color: #333;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   text-decoration: none;
+  margin-bottom: 1rem;
 }
 .btn-pink-nav:hover {
   background-color: #f3969e;
@@ -377,7 +412,6 @@ PAGE WRAPPER
   gap: 1.2rem;           /* space between the two buttons */
 }
 .btn-tan {
-  display: inline-block;
   font-weight: 600;
   border: none;
   border-radius: 12px;
@@ -391,7 +425,6 @@ PAGE WRAPPER
   padding: 1.2rem 3rem;      /* Taller and wider padding */
   border-radius: 16px;       /* Optional: rounder corners */
   font-weight: 600;          /* Optional: bolder text */
-  display: inline-block;
   text-align: center;
   transition: background-color 0.3s ease;
 }

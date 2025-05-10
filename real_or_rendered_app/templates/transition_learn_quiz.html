@@ -12,15 +12,21 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/style.css') }}"
     />
+    <!-- Load Lora with regular (400) and bold (700) weights -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     {% include "nav-bar.html" %}
     <!-- MAIN WRAPPER -->
-    <div class="page-wrapper">
+    <div class="page-wrapper-transition">
       <div class="transition-content">
         <!-- Large header -->
         <h1>
-          You’ve completed: 5/5 Clues Unlocked!
+          You’ve unlocked <span style="color: orange">5</span> out of
+          <span style="color: orange">5</span> Clues!
           <span style="font-size: 1.4rem">🎉</span>
         </h1>
         <p>
@@ -32,6 +38,7 @@
         <a href="{{ url_for('quiz', question_id=1) }}" class="btn-pink-nav">
           Start the Quiz
         </a>
+        <br />
         <br />
 
         <!-- Back to Symbolism & Intent -->
