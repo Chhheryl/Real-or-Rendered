@@ -726,9 +726,9 @@ PAGE WRAPPER
 
 /* ---------- SUBMIT BUTTON ---------- */
 .submit-row {
-  margin-top: -4rem;
-  margin-bottom: 0;
+  position: relative;
   text-align: center;
+  margin-top: -3.5rem;
 }
 .btn-submit {
   background-color: #f8b8bd;
@@ -821,10 +821,14 @@ PAGE WRAPPER
 }
 
 /* ---------- NEXT QUESTION BUTTON ---------- */
+
 .next-row {
-  text-align: center;
-  margin-top: 0.5rem;
-  display: none; /* shown after “Got It” */
+  position: absolute;
+  margin-top: -3rem;
+  left:50%;
+  transform: translateX(-50%);
+  display: none;
+  z-index: 2;
 }
 .btn-next {
   background-color: #ffe98a;

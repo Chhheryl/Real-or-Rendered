@@ -8,7 +8,7 @@
     "related": "Anatomy & Structure",
     "feedbackCorrect": "See how the proportions of the face and hands look more natural here.",
     "feedbackWrong": "This one has melting eyes and weird fingers– it's likely AI.",
-    "hintWrong": "Hint: take a closer look at the artwork you chose—did you see any disproportionate physical features?"
+    "hintWrong": "Take a closer look at the artwork you chose—did you see any disproportionate physical features?"
   },
   {
     "id": 2,
@@ -19,7 +19,7 @@
     "related": "Texture & Surface",
     "feedbackCorrect": "Nice work. The painterly texture has varied brushstrokes and subtle imperfections.",
     "feedbackWrong": "Overly smooth surfaces and airbrushed clothing are big giveaways for AI.",
-    "hintWrong": "Hint: take a closer look at the clothing in the artwork on the left—notice the overly smooth, airbrushed look?"
+    "hintWrong": "Take a closer look at the clothing in the artwork on the left—notice the overly smooth, airbrushed look?"
   },
   {
     "id": 3,
@@ -30,7 +30,7 @@
     "related": "Shadows & Light",
     "feedbackCorrect": "Correct. The lighting angles are consistent and physically plausible in the real painting.",
     "feedbackWrong": "AI renders may have inconsistent shadows or confusing highlights.",
-    "hintWrong": "Hint: check if the shadows look correct for the chosen object or figure."
+    "hintWrong": "Check if the shadows look correct for the chosen object or figure."
   },
   {
     "id": 4,
@@ -42,7 +42,7 @@
     "related": "Symbolism & Intent",
     "feedbackCorrect": "Look at the deeper narrative and accurate detail—this suggests genuine intent and historical context.",
     "feedbackWrong": "The other images have random futuristic elements or inconsistent details, typical of AI attempts at symbolic art.",
-    "hintWrong": "Hint: do you notice a cohesive story or correct historical detail in the piece you chose?"
+    "hintWrong": "Do you notice a cohesive story or correct historical detail in the piece you chose?"
   },
   {
     "id": 5,
@@ -54,6 +54,6 @@
     "related": "Symbolism & Intent",
     "feedbackCorrect": "You are correct! Niceee :)))))",
     "feedbackWrong": "Hmmm, do you think the presence of these two people in a same pic makes sense",
-    "hintWrong": "Hint: When Einstein and Tesla take a selfie in front of the Eiffel Tower... and when Steve Jobs time-traveled just to watch Elon Musk accidentally open the front camera. Pretty impressive"
+    "hintWrong": "When Einstein and Tesla take a selfie in front of the Eiffel Tower... and when Steve Jobs time-traveled just to watch Elon Musk accidentally open the front camera. Pretty impressive"
   }
 ]

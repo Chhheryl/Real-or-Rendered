@@ -115,11 +115,17 @@
           </label>
           {% endif %}
         </div>
-
-        <!-- Submit Button -->
+        
+        <!-- Submit Section -->
         <div class="submit-row">
           <button class="btn-submit" type="submit">Submit</button>
         </div>
+
+        <!-- Next Question Button: OUTSIDE -->
+        <div class="next-row" id="nextRow" style="display: none;">
+          <button class="btn-next" id="btnNext">Next Question</button>
+        </div>
+
       </form>
 
       <!-- Correct Bubble (single) -->
@@ -138,10 +144,6 @@
         </p>
       </div>
 
-      <!-- Next Question Button -->
-      <div class="next-row" id="nextRow">
-        <button class="btn-next" id="btnNext">Next Question</button>
-      </div>
     </div>
 
     <!-- ZOOM MODAL -->
@@ -289,10 +291,12 @@
         .addEventListener("click", () => {
           correctBubble.style.display = "none";
           document.getElementById("nextRow").style.display = "block";
+          document.querySelector('.submit-row').style.display = "none"; // hide the submit button so that users only have one attempt
         });
       document.getElementById("btnHintGotIt").addEventListener("click", () => {
         hintBar.style.display = "none";
         document.getElementById("nextRow").style.display = "block";
+        document.querySelector('.submit-row').style.display = "none";
       });
 
       // 6) Next question
