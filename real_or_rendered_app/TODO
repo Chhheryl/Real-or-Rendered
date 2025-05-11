@@ -1,7 +1,7 @@
-1. overview - add the topic logo to each cardboard
-2. quiz - formatting issues; add the bonus question; add a previous question button
-3. feedback page - show the scores and allow users to go back to the home page
-4. move all the javascript code into separate files
-5. quiz - after the user has reviewed the content, they should be able to directly go to the corresponding question when hitting quiz (their previous records should be saved so that they can keep hitting next question)
-6. quiz - the links directing back to the learning topics are still problematic
-7. quiz - after the user hit one choice, they cannot pick another choice (as there are only two choices in total for most questions). Instead, a pop-up message should appear telling them why the one they picked is wrong and then they should go to the next one
+1. overview - add the topic logo to each cardboard (DONE)
+2. (NEED TO DO) quiz - add a previous question button
+3. (NEED TO DO) feedback page - show the scores and allow users to go back to the home page
+4. (NEED TO DO) move all the javascript code into separate files
+5. quiz - after the user has reviewed the content, they should be able to directly go to the corresponding question when hitting quiz (their previous records should be saved so that they can keep hitting next question) (DONE)
+6. quiz - the links directing back to the learning topics are still problematic (DONE)
+7. quiz - after the user hit one choice, they cannot pick another choice (as there are only two choices in total for most questions). Instead, a pop-up message should appear telling them why the one they picked is wrong and then they should go to the next one (DONE)

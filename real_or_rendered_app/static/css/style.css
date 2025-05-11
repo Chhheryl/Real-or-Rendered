@@ -612,8 +612,9 @@ PAGE WRAPPER
 
 /* --- BIG ORANGE BUTTON --- */
 .btn-try-again {
-  display: block;
-  margin: 0 auto 1.5rem auto;
+  text-align: center;
+  display: inline-block;
+  margin: 1rem auto 1rem auto;
   background-color: #ffa94d; /* orange */
   border: none;
   border-radius: 8px;
@@ -622,6 +623,7 @@ PAGE WRAPPER
   font-weight: 700;
   font-size: 1.1rem;
   cursor: pointer;
+  text-decoration: none;
 }
 .btn-try-again:hover {
   background-color: #ff922b; /* slightly darker orange */
@@ -860,7 +862,7 @@ PAGE WRAPPER
 /* ---------- ZOOM MODAL ---------- */
 .zoom-modal .modal-content {
   border-radius: 8px;
-  border: none;
+  border:none;
 }
 
 .image-container {
