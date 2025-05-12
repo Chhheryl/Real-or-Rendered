@@ -17,31 +17,38 @@
       href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap"
       rel="stylesheet"
     />
+    <style>
+      /* make the Try It Again button larger */
+      .btn-try-again {
+        font-size: 1.75rem;
+        padding: 1rem 2.5rem;
+      }
+    </style>
   </head>
   <body>
     {% include "nav-bar.html" %}
-    <!-- PAGE WRAPPER -->
-    <div class="page-wrapper">
-      <!-- Score Header -->
-      <div class="score-header">
+
+    <div class="page-wrapper d-flex flex-column align-items-center py-5">
+      <h1 class="mb-5">
         Your total score:
-        <span>{{ score }}</span> / <span>{{ total }}</span>
+        {{ normal_correct }} / {{ normal_total }}
+        (+ {{ bonus_correct }} bonus)
+      </h1>
+
+      <div class="mb-5">
+        <button
+          class="btn-try-again btn btn-primary btn-lg"
+          onclick="location.href='{{ url_for('quiz', question_id=1) }}'"
+        >
+          Try it again
+        </button>
       </div>
 
-      <!-- Try Again Button -->
-      <button
-        class="btn-try-again"
-        onclick="window.location.href='{{ url_for('quiz', question_id=1) }}'"
-      >
-        Try it again
-      </button>
-
-      <!-- Smaller buttons row -->
-      <div class="btn-container">
-        <a href="{{ url_for('home') }}" class="btn-mini">Back to 🏠Home</a>
-        <a href="{{ url_for('transition') }}" class="btn-mini"
-          >Back to 📜Overview</a
-        >
+      <div class="d-flex flex-column align-items-center">
+        <a href="{{ url_for('home') }}" class="btn-mini mb-2">Back to 🏠 Home</a>
+        <a href="{{ url_for('transition') }}" class="btn-mini">
+          Back to 📜 Overview
+        </a>
       </div>
     </div>
 

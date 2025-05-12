@@ -1,11 +1,13 @@
+// static/js/quiz.js
 document.addEventListener("DOMContentLoaded", () => {
+  let hasCheckedAnswer = false;
+
   const quizMeta = document.getElementById("quizMeta");
   const correctAnswer = quizMeta.dataset.correct;
   const feedbackCorrect = quizMeta.dataset.feedback;
   const hintWrong = quizMeta.dataset.hint;
   const relatedTopic = quizMeta.dataset.related;
   const topicId = parseInt(quizMeta.dataset.topic);
-  const currentQ = parseInt(quizMeta.dataset.current);
 
   const choiceContainers = document.querySelectorAll(".choice-container");
   const quizForm = document.getElementById("quizForm");
@@ -26,47 +28,56 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // SUBMIT HANDLER
   quizForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const selectedRadio = document.querySelector('input[name="choice"]:checked');
-    if (!selectedRadio) return;
+    if (!hasCheckedAnswer) {
+      e.preventDefault();
+      const selectedRadio = document.querySelector('input[name="radio_choice"]:checked');
+      if (!selectedRadio) return;
 
-    // Lock choices
-    document.querySelectorAll('input[name="choice"]').forEach((r) => {
-      r.disabled = true;
-    });
+      // Clear old feedback
+      choiceContainers.forEach((c) => c.classList.remove("correct", "incorrect"));
+      correctBubble.style.display = "none";
+      hintBar.style.display = "none";
 
-    // Clear old feedback
-    choiceContainers.forEach((c) => c.classList.remove("correct", "incorrect"));
-    correctBubble.style.display = "none";
-    hintBar.style.display = "none";
+      // Evaluate and show feedback
+      const chosenValue = selectedRadio.value;
 
-    // Evaluate correctness
-    const chosenValue = selectedRadio.value;
-    const chosenContainer = document.querySelector(
-      `.choice-container[data-choice="${chosenValue}"]`
-    );
-    const isCorrect = chosenValue === correctAnswer;
+      // Lock choices
+      document.querySelectorAll('input[name="radio_choice"]').forEach((r) => {
+        r.disabled = true;
+      });
 
-    // Show feedback
-    if (isCorrect) {
-      chosenContainer.classList.add("correct");
-      correctBubbleText.innerText = feedbackCorrect;
-      positionCorrectBubble(chosenContainer);
-      correctBubble.style.display = "block";
-    } else {
-      chosenContainer.classList.add("incorrect");
-      document.getElementById("hintText").innerText = hintWrong;
-      document.getElementById("hintLink").innerText = relatedTopic;
-      document.getElementById("hintLink").href = `/learn/${topicId}`;
-      hintBar.style.display = "block";
+      const chosenContainer = document.querySelector(`.choice-container[data-choice="${chosenValue}"]`);
+      if (chosenValue === correctAnswer) {
+        chosenContainer.classList.add("correct");
+        correctBubbleText.innerText = feedbackCorrect;
+        positionCorrectBubble(chosenContainer);
+        correctBubble.style.display = "block";
+      } else {
+        chosenContainer.classList.add("incorrect");
+        document.getElementById("hintText").innerText = hintWrong;
+        document.getElementById("hintLink").innerText = relatedTopic;
+        document.getElementById("hintLink").href = `/learn/${topicId}`;
+        hintBar.style.display = "block";
+      }
+
+      // Show Next button
+      document.getElementById("nextRow").style.display = "block";
+      document.querySelector(".submit-row").style.display = "none";
+
+      hasCheckedAnswer = true;
     }
-
-    // Hide submit, show next
-    document.getElementById("nextRow").style.display = "block";
-    document.querySelector(".submit-row").style.display = "none";
+    // second submit (via Next) will POST normally
   });
 
-  // "Got it" buttons
+  // Next-button handler: re-enable & rename radios so their value goes as "choice"
+  document.getElementById("btnNext").addEventListener("click", () => {
+    document.querySelectorAll('input[name="radio_choice"]').forEach((r) => {
+      r.disabled = false;
+      r.name = 'choice';
+    });
+    quizForm.submit();
+  });
+
   document.getElementById("btnBubbleGotIt").addEventListener("click", () => {
     correctBubble.style.display = "none";
     document.getElementById("nextRow").style.display = "block";
@@ -79,12 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".submit-row").style.display = "none";
   });
 
-  // NEXT button => re-submit form
-  document.getElementById("btnNext").addEventListener("click", () => {
-    quizForm.submit();
-  });
-
-  // Position bubble
   function positionCorrectBubble(container) {
     const rect = container.getBoundingClientRect();
     const bubbleRect = correctBubble.getBoundingClientRect();
@@ -104,8 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".zoom-text").forEach((z) => {
     z.addEventListener("click", (e) => {
       e.preventDefault();
-      const imgSrc = z.getAttribute("data-img");
-      document.getElementById("zoomModalImg").src = imgSrc;
+      document.getElementById("zoomModalImg").src = z.dataset.img;
       new bootstrap.Modal(document.getElementById("zoomModal")).show();
     });
   });

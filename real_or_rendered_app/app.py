@@ -1,3 +1,4 @@
+# app.py
 from flask import Flask, render_template, request, redirect, url_for, session
 import json
 import os
@@ -33,7 +34,6 @@ def home():
 
 @app.route('/transition')
 def transition():
-    # Just an example "overview" page
     with open('data/lessons.json') as f:
         lessons = json.load(f)
     return render_template('transition.html', lessons=lessons)
@@ -46,7 +46,6 @@ def learn(lesson_id):
     next_id = lesson_id + 1 if lesson_id < len(lessons) else None
     prev_id = lesson_id - 1 if lesson_id > 1 else None
 
-    # Track completed lessons in session
     completed = session.get('completed_lessons', [])
     if lesson_id not in completed:
         completed.append(lesson_id)
@@ -67,25 +66,23 @@ def transition_learn_quiz():
 
 @app.route('/quiz/<int:question_id>', methods=['GET', 'POST'])
 def quiz(question_id):
-    # Load the quiz data
     with open('data/quiz.json') as f:
         quiz_data = json.load(f)
 
-    # If user tries /quiz/6 or more, redirect to score
     if question_id > len(quiz_data):
         return redirect(url_for('score'))
 
-    # Attempt to find the question object by ID
     question = next((q for q in quiz_data if q['id'] == question_id), None)
     if not question:
-        # If no question found (e.g. ID mismatch), also go to score or 404
         return redirect(url_for('score'))
 
     if request.method == 'POST':
         choice = request.form.get('choice')
-        session['answers'][str(question_id)] = choice
+        # pull out, mutate, then reassign so Flask knows to save it
+        answers = session.get('answers', {})
+        answers[str(question_id)] = choice
+        session['answers'] = answers
 
-        # If question_id < total, go to next; else go to /score
         if question_id < len(quiz_data):
             return redirect(url_for('quiz', question_id=question_id + 1))
         else:
@@ -95,44 +92,44 @@ def quiz(question_id):
 
 @app.route('/score')
 def score():
-    # Show final results after question #5
     with open('data/quiz.json') as f:
         quiz_data = json.load(f)
 
     answers = session.get('answers', {})
-    total_questions = len(quiz_data)  # e.g. 5
 
-    score_value = 0
-    feedback = []
+    # split normal vs bonus by looking for "Bonus" in the question text
+    normal_questions = [q for q in quiz_data if not q['question'].lower().startswith('bonus')]
+    bonus_questions = [q for q in quiz_data if     q['question'].lower().startswith('bonus')]
 
-    for q in quiz_data:
-        qid = str(q['id'])
-        user_choice = answers.get(qid)
-        if user_choice == q['correct']:
-            score_value += 1
-        feedback.append({
-            'id': qid,
-            'selected': user_choice,
-            'correct': q['correct'],
-            'related': q['related']
-        })
+    normal_total    = len(normal_questions)
+    bonus_total     = len(bonus_questions)
+    normal_correct  = sum(1 for q in normal_questions if answers.get(str(q['id'])) == q['correct'])
+    bonus_correct   = sum(1 for q in bonus_questions  if answers.get(str(q['id'])) == q['correct'])
 
-    # Save user data
-    data = load_user_data()
+    # compute percent, guard against divide-by-zero
+    normal_accuracy = round(normal_correct / normal_total * 100) if normal_total else 0
+    bonus_accuracy  = round(bonus_correct  / bonus_total  * 100) if bonus_total  else 0
+
+    # still log into users.json as before
+    data    = load_user_data()
     user_id = str(datetime.now().timestamp())
     data[user_id] = {
-        'start_time': session.get('start_time'),
-        'answers': answers,
-        'score': score_value
+      'start_time'   : session.get('start_time'),
+      'answers'      : answers,
+      'score'        : normal_correct + bonus_correct
     }
     save_user_data(data)
 
     return render_template(
-        'score.html',
-        score=score_value,
-        total=total_questions,
-        feedback=feedback
+      'score.html',
+      normal_correct=normal_correct,
+      normal_total=normal_total,
+      normal_accuracy=normal_accuracy,
+      bonus_correct=bonus_correct,
+      bonus_total=bonus_total,
+      bonus_accuracy=bonus_accuracy
     )
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
