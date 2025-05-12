@@ -39,32 +39,85 @@
 
       <form id="quizForm" method="POST">
         <div class="choices-row">
-          <label class="choice-container" data-choice="A" {% if question.optionA is not defined %}style="display:none"{% endif %}>
-            <img src="{{ url_for('static', filename='images/' + question.optionA) }}" alt="Option A" class="choice-image" />
+          <label
+            class="choice-container"
+            data-choice="A"
+            {%
+            if
+            question.optionA
+            is
+            not
+            defined
+            %}style="display:none"
+            {%
+            endif
+            %}
+          >
+            <img
+              src="{{ url_for('static', filename='images/' + question.optionA) }}"
+              alt="Option A"
+              class="choice-image"
+            />
             <div class="choice-radio">
               <input type="radio" name="radio_choice" value="A" required />
             </div>
             <div style="margin: 1rem"></div>
-            <div class="zoom-text" data-img="{{ url_for('static', filename='images/' + question.optionA) }}">🔍 Zoom in</div>
+            <div
+              class="zoom-text"
+              data-img="{{ url_for('static', filename='images/' + question.optionA) }}"
+            >
+              🔍 Zoom in
+            </div>
           </label>
 
-          <label class="choice-container" data-choice="B" {% if question.optionB is not defined %}style="display:none"{% endif %}>
-            <img src="{{ url_for('static', filename='images/' + question.optionB) }}" alt="Option B" class="choice-image" />
+          <label
+            class="choice-container"
+            data-choice="B"
+            {%
+            if
+            question.optionB
+            is
+            not
+            defined
+            %}style="display:none"
+            {%
+            endif
+            %}
+          >
+            <img
+              src="{{ url_for('static', filename='images/' + question.optionB) }}"
+              alt="Option B"
+              class="choice-image"
+            />
             <div class="choice-radio">
               <input type="radio" name="radio_choice" value="B" required />
             </div>
             <div style="margin: 1rem"></div>
-            <div class="zoom-text" data-img="{{ url_for('static', filename='images/' + question.optionB) }}">🔍 Zoom in</div>
+            <div
+              class="zoom-text"
+              data-img="{{ url_for('static', filename='images/' + question.optionB) }}"
+            >
+              🔍 Zoom in
+            </div>
           </label>
 
           {% if question.optionC is defined %}
           <label class="choice-container" data-choice="C">
-            <img src="{{ url_for('static', filename='images/' + question.optionC) }}" alt="Option C" class="choice-image" />
+            <img
+              src="{{ url_for('static', filename='images/' + question.optionC) }}"
+              alt="Option C"
+              class="choice-image"
+            />
             <div class="choice-radio">
               <input type="radio" name="radio_choice" value="C" required />
             </div>
             <div style="margin: 1rem"></div>
-            <div class="zoom-text" data-img="{{ url_for('static', filename='images/' + question.optionC) }}">🔍 Zoom in</div>
+            <div
+              class="zoom-text"
+              data-img="{{ url_for('static', filename='images/' + question.optionC) }}"
+            >
+              🔍 Zoom in
+            </div>
           </label>
           {% endif %}
         </div>
@@ -74,7 +127,10 @@
         </div>
 
         <div class="next-row" id="nextRow" style="display: none">
-          <button class="btn-next" id="btnNext" type="button">Next Question</button>
+          <button class="btn-next" id="btnNext" type="button">
+            {% if question.id == total_questions %} Next {% else %} Next
+            Question {% endif %}
+          </button>
         </div>
       </form>
 
@@ -93,12 +149,22 @@
       </div>
     </div>
 
-    <div class="modal fade zoom-modal" id="zoomModal" tabindex="-1" aria-hidden="true">
+    <div
+      class="modal fade zoom-modal"
+      id="zoomModal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Zoom View</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="modal-body text-center">
             <img id="zoomModalImg" class="img-fluid" alt="Zoomed Artwork" />
