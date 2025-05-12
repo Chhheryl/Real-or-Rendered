@@ -1,18 +1,11 @@
-/**
- * quiz.js
- * Handles all quiz functionality: selection, submission, feedback, zoom, and navigation
- * also includes persistent progress tracking with localStorage
- */
-
 document.addEventListener("DOMContentLoaded", () => {
-  // === GET QUIZ METADATA ===
   const quizMeta = document.getElementById("quizMeta");
   const correctAnswer = quizMeta.dataset.correct;
   const feedbackCorrect = quizMeta.dataset.feedback;
   const hintWrong = quizMeta.dataset.hint;
   const relatedTopic = quizMeta.dataset.related;
-  const currentQ = parseInt(quizMeta.dataset.current);
   const topicId = parseInt(quizMeta.dataset.topic);
+  const currentQ = parseInt(quizMeta.dataset.current);
 
   const choiceContainers = document.querySelectorAll(".choice-container");
   const quizForm = document.getElementById("quizForm");
@@ -20,10 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const correctBubbleText = document.getElementById("correctBubbleText");
   const hintBar = document.getElementById("hintBar");
 
-  // === (REMOVED) RESTORE PRIOR SUBMISSION BLOCK ===
-  // We remove the auto-display of feedback to force users to re-submit each time.
-
-  // === CHOICE HIGHLIGHTING ===
+  // CHOICE SELECTION UI
   choiceContainers.forEach((container) => {
     const radio = container.querySelector('input[type="radio"]');
     if (radio) {
@@ -34,59 +24,67 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // === SUBMISSION HANDLER ===
-  quizForm.addEventListener("submit", function (event) {
-    event.preventDefault();
+  // SUBMIT HANDLER
+  quizForm.addEventListener("submit", (e) => {
+    e.preventDefault();
     const selectedRadio = document.querySelector('input[name="choice"]:checked');
     if (!selectedRadio) return;
 
-    const chosenValue = selectedRadio.value;
-    const chosenContainer = document.querySelector(
-      `.choice-container[data-choice="${chosenValue}"]`
-    );
-
-    // Lock answers
+    // Lock choices
     document.querySelectorAll('input[name="choice"]').forEach((r) => {
       r.disabled = true;
     });
 
-    // Remove old highlights
+    // Clear old feedback
     choiceContainers.forEach((c) => c.classList.remove("correct", "incorrect"));
     correctBubble.style.display = "none";
     hintBar.style.display = "none";
 
-    // Save the result in localStorage
-    const savedAnswers = JSON.parse(localStorage.getItem("quizAnswers") || "{}");
+    // Evaluate correctness
+    const chosenValue = selectedRadio.value;
+    const chosenContainer = document.querySelector(
+      `.choice-container[data-choice="${chosenValue}"]`
+    );
     const isCorrect = chosenValue === correctAnswer;
-    savedAnswers[currentQ] = {
-      choice: chosenValue,
-      correct: isCorrect,
-    };
-    localStorage.setItem("quizAnswers", JSON.stringify(savedAnswers));
 
     // Show feedback
     if (isCorrect) {
-      chosenContainer.classList.remove("selected");
       chosenContainer.classList.add("correct");
-      positionCorrectBubble(chosenContainer);
       correctBubbleText.innerText = feedbackCorrect;
+      positionCorrectBubble(chosenContainer);
       correctBubble.style.display = "block";
     } else {
-      chosenContainer.classList.remove("selected");
       chosenContainer.classList.add("incorrect");
       document.getElementById("hintText").innerText = hintWrong;
       document.getElementById("hintLink").innerText = relatedTopic;
-      // Set the related topic link
       document.getElementById("hintLink").href = `/learn/${topicId}`;
       hintBar.style.display = "block";
     }
 
-    // Hide submit + show next
+    // Hide submit, show next
     document.getElementById("nextRow").style.display = "block";
     document.querySelector(".submit-row").style.display = "none";
   });
 
-  // === POSITION FEEDBACK BUBBLE ===
+  // "Got it" buttons
+  document.getElementById("btnBubbleGotIt").addEventListener("click", () => {
+    correctBubble.style.display = "none";
+    document.getElementById("nextRow").style.display = "block";
+    document.querySelector(".submit-row").style.display = "none";
+  });
+
+  document.getElementById("btnHintGotIt").addEventListener("click", () => {
+    hintBar.style.display = "none";
+    document.getElementById("nextRow").style.display = "block";
+    document.querySelector(".submit-row").style.display = "none";
+  });
+
+  // NEXT button => re-submit form
+  document.getElementById("btnNext").addEventListener("click", () => {
+    quizForm.submit();
+  });
+
+  // Position bubble
   function positionCorrectBubble(container) {
     const rect = container.getBoundingClientRect();
     const bubbleRect = correctBubble.getBoundingClientRect();
@@ -102,27 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
     correctBubble.style.left = `${leftPos}px`;
   }
 
-  // === “GOT IT” BUTTONS ===
-  document.getElementById("btnBubbleGotIt").addEventListener("click", () => {
-    correctBubble.style.display = "none";
-    document.getElementById("nextRow").style.display = "block";
-    document.querySelector(".submit-row").style.display = "none";
-  });
-
-  document.getElementById("btnHintGotIt").addEventListener("click", () => {
-    hintBar.style.display = "none";
-    document.getElementById("nextRow").style.display = "block";
-    document.querySelector(".submit-row").style.display = "none";
-  });
-
-  // === NEXT BUTTON ===
-  document.getElementById("btnNext").addEventListener("click", () => {
-    sessionStorage.setItem("suppressFeedback", "true");
-    const nextQ = currentQ + 1;
-    window.location.href = `/quiz/${nextQ}`;
-  });
-
-  // === ZOOM MODAL ===
+  // Zoom logic
   document.querySelectorAll(".zoom-text").forEach((z) => {
     z.addEventListener("click", (e) => {
       e.preventDefault();

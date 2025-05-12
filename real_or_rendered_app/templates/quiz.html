@@ -35,26 +35,18 @@
       <!-- Prompt -->
       <div class="quiz-prompt">
         <h1>{{ question.question }}</h1>
-        <div class="question-count">Question {{ question.id }} out of 4</div>
+        <div class="question-count">Question {{ question.id }} out of 5</div>
       </div>
 
       <!-- QUIZ FORM -->
-      <form id="quizForm">
+      <!-- Important: method="POST" so next button can re-submit -->
+      <form id="quizForm" method="POST">
         <div class="choices-row">
           <!-- Option A -->
           <label
             class="choice-container"
             data-choice="A"
-            {%
-            if
-            question.optionA
-            is
-            not
-            defined
-            %}style="display:none"
-            {%
-            endif
-            %}
+            {% if question.optionA is not defined %}style="display:none"{% endif %}
           >
             <img
               src="{{ url_for('static', filename='images/' + question.optionA) }}"
@@ -77,16 +69,7 @@
           <label
             class="choice-container"
             data-choice="B"
-            {%
-            if
-            question.optionB
-            is
-            not
-            defined
-            %}style="display:none"
-            {%
-            endif
-            %}
+            {% if question.optionB is not defined %}style="display:none"{% endif %}
           >
             <img
               src="{{ url_for('static', filename='images/' + question.optionB) }}"
@@ -105,7 +88,7 @@
             </div>
           </label>
 
-          <!-- Option C (only if the JSON has it) -->
+          <!-- Option C (only if your JSON has it) -->
           {% if question.optionC is defined %}
           <label class="choice-container" data-choice="C">
             <img
@@ -134,7 +117,7 @@
 
         <!-- Next Question Button: OUTSIDE -->
         <div class="next-row" id="nextRow" style="display: none">
-          <!-- Changed: add type="button" to prevent flicker -->
+          <!-- type="button" so it doesn't auto-submit; we do quizForm.submit() in JS -->
           <button class="btn-next" id="btnNext" type="button">Next Question</button>
         </div>
       </form>
