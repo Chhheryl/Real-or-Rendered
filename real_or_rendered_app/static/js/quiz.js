@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const hintWrong = quizMeta.dataset.hint;
   const relatedTopic = quizMeta.dataset.related;
   const topicId = parseInt(quizMeta.dataset.topic);
+  // grab the current question number (so we can special-case Q4 & Q5)
+  const currentQuestion = parseInt(quizMeta.dataset.current, 10);
 
   const choiceContainers = document.querySelectorAll(".choice-container");
   const quizForm = document.getElementById("quizForm");
@@ -95,11 +97,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const bubbleRect = correctBubble.getBoundingClientRect();
     const pageMid = window.innerWidth / 2;
     const containerCenter = rect.left + rect.width / 2;
-    let topPos = rect.top + window.scrollY + 30;
-    let leftPos =
-      containerCenter < pageMid
-        ? rect.right + window.scrollX + 10
-        : rect.left + window.scrollX - bubbleRect.width - 10;
+    const topPos = rect.top + window.scrollY + 30;
+
+    // base horizontal gap
+    let gap = 10;
+    // if this is Q4 or Q5 (the bonus), push further right
+    if (currentQuestion === 4 || currentQuestion === 5) {
+      gap = 30;
+    }
+
+    // for Q4 & Q5, always render bubble to the right
+    let leftPos;
+    if (containerCenter < pageMid || currentQuestion === 4 || currentQuestion === 5) {
+      leftPos = rect.right + window.scrollX + gap;
+    } else {
+      leftPos = rect.left + window.scrollX - bubbleRect.width - gap;
+    }
 
     correctBubble.style.top = `${topPos}px`;
     correctBubble.style.left = `${leftPos}px`;
